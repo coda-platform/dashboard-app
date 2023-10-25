@@ -4,7 +4,7 @@ import keycloakConfig from './keycloakConfig';
  
 // Setup Keycloak client as needed
 // Pass initialization options as required
-const keycloak = Keycloak(keycloakConfig);
+const keycloak = new Keycloak(keycloakConfig);
  
 // Call init passing a custom adapter
 export default keycloak;

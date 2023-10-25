@@ -5,7 +5,7 @@
       <div class="row">
         <div v-for="(tile,i) in numberTiles" class="col-lg-4 col-md-4">
           <HomeTextTile :txTitle= "$t(titleKeys[i])"
-                        :nSites="3"
+                        :nSites="5"
                         :txBottom="i==='1' ? $t('home_positivity',{positivity: tile.rate}) : $t('home_average',{average: tile.average})  + $t('home_rt',{rate: tile.rt})"
                         :data="tile.total"></HomeTextTile>
         </div>

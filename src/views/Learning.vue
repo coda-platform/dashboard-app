@@ -257,7 +257,7 @@ export default {
         { name: "Validation Accuracy", value: "val_acc" },
         { name: "Validation Loss", value: "val_loss" },
       ],
-      countFields: ["siteCode", "count", "totalCount"],
+      countFields: ["siteCode", "count"],
       progressInterval: null,
       progressResult: [],
       evaluateResult: [],
