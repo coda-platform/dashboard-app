@@ -94,19 +94,17 @@
             </div>
           </BCardHeader>
           <BCardBody class="sitesCardBody">
-            <BFormGroup>
-              <BFormCheckbox
-                class="sites-checkbox"
-                v-model="selectedSites"
-                v-for="availableSite in availableSites"
-                :key="availableSite.uid"
-                :value="availableSite.uid"
-              >
-                <strong
-                  >{{ availableSite.uid }} - {{ availableSite.name }}</strong
-                >
-              </BFormCheckbox>
-            </BFormGroup>
+              
+            <BFormCheckbox
+              class="sites-checkbox"
+              v-for="availableSite in availableSites"
+              :key="availableSite.uid"
+              :checked="isSelected(availableSite.uid)"
+              @change="toggleSiteSelection(availableSite)"
+            >
+              <strong>{{ availableSite.uid }} - {{ availableSite.name }}</strong>
+            </BFormCheckbox>
+
           </BCardBody>
         </BCard>
       </BCol>
@@ -143,17 +141,21 @@
 </template>
 
 <script>
+import { isProxy, toRaw } from 'vue'
+
 import LearningApi from "@/api/LearningApi";
-import SiteApi from "@/api/SiteApi";
 import LearningLineChart from "../components/LearningLineChart.vue";
+import SiteApi from "@/api/SiteApi";
 
 export default {
   components: { LearningLineChart },
   name: "Learning",
   methods: {
     getSelectedSitesList() {
-      console.log('Selected sites', this.selectedSites)
-      return (this.selectedSites ?? []).join(",")
+      const rawData = this.selectedSites
+      const sites = isProxy(rawData) ? toRaw(rawData) : [...rawData]
+      console.log('Selected sites', sites)
+      return sites.join(",")
     },
     getPrepare() {
       const sitesUri = this.getSelectedSitesList()
@@ -228,15 +230,32 @@ export default {
         }
       });
     },
+    
+    // Check if a site is selected
+    isSelected(uid) {
+      return this.selectedSites.includes(uid);
+    },
+    
+    // Toggle the site selection based on its UID
+    toggleSiteSelection(event) {
+      const selection = toRaw(event)
+      const value = selection?.value
+      if (this.isSelected(value)) {
+        this.selectedSites = this.selectedSites.filter(siteUid => siteUid !== value)
+      } else {
+        this.selectedSites = [...this.selectedSites, value]
+      }
+    }
+
   },
   async created() {
     await SiteApi.get()
       .then((res) => res.data)
       .then((json) => json.connections)
       .then((conn) => {
-        this.availableSites = conn;
+        this.availableSites = conn.map(({uid, name}) => ({value: uid, name}));
         console.log('Available sites: ', this.availableSites)
-      });
+      })
   },
   data() {
     return {
@@ -359,7 +378,8 @@ export default {
     evaluateBody: function () {
       return `{"job": "${this.jobID}"}`;
     },
-  },
+  }
+
 };
 </script>
 
