@@ -48,40 +48,33 @@ app.use();
 
 console.log(`⚡️[coda-dashboard-frontend]: Running ${version.getBuildVersion()} version of build`);
 
-// Note(malavv) : The dual instantiation of Vue is normal, here it is used just for an encapsulated EventBus.
-
-//export const bus = createApp()
 export const bus = mitt()
 
-// prep for Keycloak
-// onLoad: 'login-required'
-keycloak.init({ checkLoginIframe: false }).then(async (auth_) => {
+keycloak.init({ onLoad: 'login-required' }).then(async (auth) => {
 
-  /*
-    if (!auth) {
-      window.location.reload();
-    } else { */
-  app.$log.info("Authenticated");
+  if (!auth) {
+    window.location.reload();
+  } else {
+    app.$log.info("Authenticated");
 
-  TokenContext.setToken(keycloak.token);
+    TokenContext.setToken(keycloak.token);
 
-  const i18n = createI18n({
-    legacy: false,
-    locale: "en",
-    fallbackLocale: "fr",
-    globalInjection: true,
-    runtimeOnly: false,
-    messages: { en, fr }
-  })
-  const loggedInApp = createApp(App)
-  loggedInApp.use(i18n)
-  loggedInApp.use(router)
-  loggedInApp.use(vuetify)
-  loggedInApp.render = () => h(App, { props: { keycloak: keycloak } })
-  loggedInApp.mount('#app')
+    const i18n = createI18n({
+      legacy: false,
+      locale: "en",
+      fallbackLocale: "fr",
+      globalInjection: true,
+      runtimeOnly: false,
+      messages: { en, fr }
+    })
+    const loggedInApp = createApp(App)
+    loggedInApp.use(i18n)
+    loggedInApp.use(router)
+    loggedInApp.use(vuetify)
+    loggedInApp.render = () => h(App, { props: { keycloak: keycloak } })
+    loggedInApp.mount('#app')
 
-  //  }
-
+  }
 
   //Token Refresh
   setInterval(() => {
@@ -100,4 +93,4 @@ keycloak.init({ checkLoginIframe: false }).then(async (auth_) => {
 
 }).catch(() => {
   app.$log.error("Authenticated Failed");
-});
+})
