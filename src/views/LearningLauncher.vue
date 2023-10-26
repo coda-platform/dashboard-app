@@ -123,7 +123,7 @@
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
                   :dataToPlot="metric"
-                  :data="getProgressResult"
+                  :dataValues="progressResult"
                 ></LearningLineChart>
               </BCardBody>
             </BCard>
@@ -239,9 +239,6 @@ export default {
   methods: {
     getPrepareBody() {
       return JSON.parse(isProxy(this.prepareBody) ? toRaw(this.prepareBody) : this.prepareBody)
-    },
-    getProgressResult() {
-      return isProxy(this.progressResult) ? toRaw(this.progressResult) : this.progressResult
     },
     getSelectedSitesList() {
       const rawData = this.selectedSites

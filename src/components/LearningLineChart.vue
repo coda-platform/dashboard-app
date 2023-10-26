@@ -27,7 +27,7 @@ export default {
   name: "MultiLineChart",
   components: { VChart },
   props: {
-    data: Array,
+    dataValues: Array,
     dataToPlot: Object,
   },
   data() {
@@ -42,7 +42,7 @@ export default {
     datasetTransform: function () {
       let filters = [];
       if (this.sites.length == 0) {
-        this.data.forEach((el) => {
+        this.dataValues.forEach((el) => {
           if (!this.sites.includes(el.siteCode)) {
             this.sites.push(el.siteCode);
           }
@@ -51,7 +51,7 @@ export default {
 
       filters.push({
         id: "dataset_raw",
-        source: this.data,
+        source: this.dataValues,
       });
       this.sites.forEach((site) => {
         const filter = {
@@ -75,7 +75,7 @@ export default {
     datasetSeries: function () {
       let series = [];
       if (this.sites.length == 0) {
-        this.data.forEach((el) => {
+        this.dataValues.forEach((el) => {
           if (!this.sites.includes(el.siteCode)) {
             this.sites.push(el.siteCode);
           }
