@@ -116,8 +116,8 @@ export default {
       this.datasetSeries()
       console.log('option called', this.filters, this.series)
       return {
-        dataset: this.filters,
-        series: this.series,
+        dataset: JSON.parse(JSON.stringify(this.filters)),
+        series: JSON.parse(JSON.stringify(this.series)),
         legend: { data: this.sites },
         tooltip: { trigger: "axis" },
         grid: { bottom: "3%", containLabel: true },
