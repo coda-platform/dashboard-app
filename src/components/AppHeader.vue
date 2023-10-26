@@ -55,7 +55,7 @@
         $t("hubNotConnectedTxt")
       }}</BNavItem>
       <BNavItem>
-        <BButton variant="info" @click="keycloak.logout()">{{
+        <BButton id="logoutButton" @click="keycloak.logout()">{{
           $t("logoutTxt")
         }}</BButton>
       </BNavItem>

@@ -98,8 +98,8 @@
           </div>
 
           <div class="selectionPanel">
-            <BCard no-body>
-              <BTabs v-model="tabIndex" card>
+            <BCard id="selectResourceCard" no-body>
+              <BTabs id="selectResourceTabs" v-model="tabIndex" card>
                 <BTab
                   v-for="resource in form.qB"
                   :key="'dyn-tab-' + resource.label"
@@ -151,8 +151,9 @@
 
                 <!-- New Tab Button (Using tabs-end slot) -->
                 <template #tabs-end>
-                  <BNavItem role="presentation" href="#" v-b-modal.modal-1
-                    ><strong>{{ $t("resources_add") }}</strong></BNavItem
+                  <BNavItem role="presentation" href="#" v-b-modal.modal-1>
+                    <span style="font-size: 14px; padding-left: 8px;">{{ $t("resources_add") }}</span>
+                  </BNavItem
                   >
                   <BModal
                     id="modal-1"

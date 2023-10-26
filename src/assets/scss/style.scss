@@ -15,7 +15,7 @@ body {
 }
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
@@ -55,11 +55,16 @@ body {
     font-weight: bolder;
   }
 
-  .selectionPanel,
+  .selectionPanel {
+    padding: 16px;
+    border-radius: 4px;
+    width: 100%;
+    border-width: 0px;
+  }
   .resultPanel {
     border-top: 1px solid #e5e5e5;
     padding: 15px;
-    border-radius: 5px;
+    border-radius: 4px;
 
     .subPanel {
       margin-bottom: 10px;
@@ -67,6 +72,7 @@ body {
 
     button {
       border: 1px solid #cdcdcd;
+      background-color: #214473;
       border-radius: 4px;
       padding: 5px;
       margin: 5px;
@@ -78,11 +84,12 @@ body {
 
     .closeBtn {
       display: none;
+      color: #f1573f;
     }
     .active {
       .closeBtn {
         display: block;
-        color: #d9534f;
+        color: #f1573f;
         font-weight: bold;
         margin-left: 10px;
       }
@@ -90,17 +97,17 @@ body {
   }
 }
 .roundBorderPanel.v-card.v-sheet.theme--light {
-  border-radius: 30px;
+  border-radius: 4px;
 }
 .txTile {
   text-align: center;
   padding: 20px;
   .dataTileContent {
-    font-size: 60px;
+    font-size: 40px;
     margin: 22px 0;
   }
   .tileTitle {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: bold;
   }
 }
@@ -119,7 +126,7 @@ body {
 .connectedPanel {
   text-align: left;
   background-color: aliceblue;
-  border-radius: 12px;
+  border-radius: 4px;
   padding: 22px;
 
   .siteList {
@@ -159,7 +166,7 @@ body {
 #currentDate {
   margin: auto 15px;
 
-  font-size: 1.5rem;
+  font-size: 1rem;
   font-weight: bold;
   cursor: default;
   pointer-events: none;
@@ -167,6 +174,44 @@ body {
   a {
     color: #464646;
   }
+}
+
+#logoutButton {
+  margin: auto 15px;
+  background-color: #96ceb7;
+  border-width: 0;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: white;
+}
+
+#selectResourceCard {
+  border-width: 0;
+  background-color: white;
+}
+#selectResourceTabs {
+  border-width: 0;
+  background-color: white;
+}
+.card-header {
+  border-width: 0;
+  background-color: white;
+}
+.card-header-tabs {
+  border-width: 0;
+  background-color: white;
+}
+.nav-tabs {
+  border-width: 0;
+  background-color: white;
+}
+.nav-item {
+  font-size: 14px;
+}
+
+.tab-content {
+  border-width: 0;
+  background-color: white;
 }
 
 #langBtn {
@@ -186,6 +231,8 @@ body {
     }
     background-size: 4px 50px;
   }
+
+  margin-bottom: 18px;
 }
 
 .legendContainer {
@@ -230,11 +277,11 @@ body {
     background-color: inherit;
     color: #017b5f;
     //border: 1px solid #000000;
-    border-radius: 50%;
+    border-radius: 4px;
   }
   .siteIcon.Mean {
     width: 4px;
-    border-radius: 2px;
+    border-radius: 4px;
     margin-left: 7px;
     margin-right: 19px;
   }
@@ -345,7 +392,7 @@ body {
   .preparePanel,
   .resultPanel {
     border-top: 1px solid #e5e5e5;
-    border-radius: 5px;
+    border-radius: 4px;
     // .active{
     //   .closeBtn{
     //     display: block;
