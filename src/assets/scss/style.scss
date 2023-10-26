@@ -67,6 +67,7 @@ body {
     width: 100%;
     border-width: 0px;
     overflow: visible;
+    padding: 8px;
   }
   .resultPanel {
     border-top: 1px solid #e5e5e5;
@@ -455,6 +456,25 @@ body {
   float: right;
 }
 
+.toggleBreakdownButton {
+  background-color: #cccccc;
+  border-width: 0;
+  border-radius: 4px;
+  color: white !important; 
+  &.toggled {
+    background-color: #19a68d; 
+  }
+  font-size: 12px;
+  position: absolute;
+  top: 12px;
+  right: 8px;
+  width: 150px;
+  height: 20px;
+  line-height: 20px;
+  margin: 0;
+  padding: 0;
+}
+
 .queryButton {
   width: 100%;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px
@@ -464,4 +484,10 @@ body {
   &.active {
     background-color: #114577 !important;
   }
+}
+
+.btn-xs {
+  border-radius: 4px !important;
+  border-width: 0px !important;
+  margin-left: 4px !important;
 }

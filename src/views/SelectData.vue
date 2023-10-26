@@ -189,64 +189,64 @@
           <div class="panelTitle">
             <span>{{ $t("selectBreakdownTxt") }}</span>
           </div>
-          <div class="selectBreakdown selectionPanel">
-            <v-btn
-              class="filter-button"
-              :class="{ toggled: breakdown }"
-              @click="breakdown = !breakdown"
+          <div class="selectBreakdown selectionPanel" style="width: 100%">
+            <BButton
+              class="toggleBreakdownButton"
+              :class="breakdown ? 'toggled' : ''"
+              @click="toggleBreakdown"
             >
-              <span v-if="breakdown">{{ $t("disable_breakdown") }}</span>
-              <span v-if="!breakdown">{{ $t("enable_breakdown") }}</span>
-            </v-btn>
+              <span v-if="breakdown">{{ $t("disableBreakdown") }}</span>
+              <span v-if="!breakdown">{{ $t("enableBreakdown") }}</span>
+            </BButton>
 
-            <p>{{ $t("selectBreakdownByTxt") }}</p>
+            <div v-if="breakdown">
             <div class="row">
               <div class="col-lg-4 col-md-4">
                 <div>{{ $t("selectResourceTypeTxt") }}</div>
                 <div>
-                  <BFormSelect
+                  <select
                     class="form-control"
-                    id="resourceType_breakdown"
                     v-model="form.breakdown.resourceType"
-                    :disabled="!breakdown"
-                    :options="resourceTabOptions"
                   >
-                  </BFormSelect>
-                  <!-- <select class="form-control"  id="resourceType_breakdown" v-model="form.breakdown.resourceType" :disabled="!breakdown">
-                        <option >{{ $t("selectResourcePatient") }}</option>
-                      </select> -->
+                    <option 
+                      v-for="(option, index) in resourceTabOptions"
+                      :key="index"
+                      :value="option.text"
+                    >
+                      {{ option.text }}
+                    </option>
+                  </select>
                 </div>
               </div>
               <div
                 class="col-lg-6 col-md-6"
+                style="margin-top: 16px;"
                 v-if="this.form.breakdown.resourceType"
               >
                 <div>{{ $t("selectResourceAttributeTxt") }}</div>
                 <div>
-                  <BFormSelect
+                  <select
                     class="form-control"
-                    id="resourceAttribute_breakdown"
                     v-model="form.breakdown.resourceAttribute"
-                    :disabled="!breakdown"
-                    text-field="path"
-                    value-field="path"
-                    :options="
-                      resourceAttributeBreakdownOptions(
-                        form.breakdown.resourceType,
-                      )
-                    "
                   >
-                  </BFormSelect>
-                  <!-- <select class="form-control" id="resourceAttribute_breakdown"  v-model="form.breakdown.resourceAttribute" :disabled="!breakdown">
-                        <option >{{ $t("selectResourceAttributeAge")}}</option>
-                        <option >{{ $t("selectResourceAttributeSex")}}</option>
-                       <option >{{ $t("selectResourceAttributeDeathDate")}}</option>
-                      </select> -->
+                    <option 
+                      v-for="(option, index) in resourceAttributeBreakdownOptions(
+                        form.breakdown.resourceType,
+                      )"
+                      :key="index"
+                      :value="option.path"
+                    >
+                      {{ option.path }}
+                    </option>
+                  </select>
                 </div>
               </div>
+              
             </div>
+            
             <div class="row" v-if="this.form.breakdown.resourceAttribute">
-              <div class="col-lg-4 col-md-4">
+              <div class="col-lg-4 col-md-4" 
+                style="margin-top: 16px;">
                 <span>{{ $t("breakdownStart") }}</span>
                 <input
                   class="form-control"
@@ -281,6 +281,7 @@
                 />
               </div>
             </div>
+          </div>
           </div>
         </v-card>
       </div>
@@ -332,6 +333,7 @@
 <style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <script>
+
 import { bus } from "@/main";
 import _ from "underscore";
 import Multiselect from "vue-multiselect";
@@ -416,6 +418,7 @@ export default {
       connOptions: [],
       allSelected: true,
       indeterminate: false,
+      breakdownResourceType: undefined,
       //patient:"",
       componentKey: this.$i18n.locale,
       form: {
@@ -514,7 +517,12 @@ export default {
       console.info("post_data", post_data);
 
       //TODO: Send request to server
-      return GeneralApi.testData(post_data).then((res) => res.data);
+      try {
+        return GeneralApi.testData(post_data).then((res) => res.data);
+      } catch (err) {
+        console.error('Error getting test data', err)
+        return []
+      }
     },
 
     getNSummaryData: async function () {
@@ -545,31 +553,33 @@ export default {
         }),
       );
 
-      const data = await GeneralApi.mockStats(
-        sitesUri,
-        contMeasuresUri,
-        discMeasuresUri,
-        resourcesParams,
-        breakdownUri,
-      )
+      try {
+        const data = await GeneralApi.mockStats(
+          sitesUri,
+          contMeasuresUri,
+          discMeasuresUri,
+          resourcesParams,
+          breakdownUri,
+        )
         .then((res) => res.data)
         .catch((err) => console.error(err));
 
-      return data;
+        return data;
+      } catch (err) {
+        console.error('Error getting summary data', err)
+        return {}
+      }
+
     },
 
     onSubmit: async function () {
       try {
-        // I've placed more code than needed here, but I was trying to make any debugging easier while we are impl.
-        // the linking between form and data panels.
         const sites = this.form.sites.map((s) => s.value);
         const request = SummaryFormFactory.fromForm(this.form, this.breakdown);
         console.log("Making Summary requests with given sites", request, sites);
         this.awaitSubmit = true;
 
-        // This will only accept two mocked task (the two demo tasks) for the moment.
-        //const data = await GeneralApi.temporaryGetMockedTaskData(request, sites); // For local development
-        const data = await GeneralApi.customRequest(request, sites); // When pushing to prod.
+        const data = await GeneralApi.customRequest(request, sites);
 
         console.info(
           "[SelectData.vue] Data received with correct format ",
@@ -589,7 +599,7 @@ export default {
         this.isError = true;
         this.errorMsg = err.message;
         this.awaitSubmit = false;
-        console.log(err.message);
+        console.log('Error on submit', err.message);
       }
     },
     onReset() {},
@@ -621,6 +631,10 @@ export default {
     },
     getQuery(query) {
       this.form.qB[this.tabIndex].query = query;
+    },
+    toggleBreakdown() {
+      console.log(this.breakdown)
+      this.breakdown = !this.breakdown
     },
     newTab() {
       if (!this.newResource) {

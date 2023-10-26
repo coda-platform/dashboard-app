@@ -235,7 +235,7 @@ const defaultPrepareBody = `{
 
 export default {
   components: { LearningLineChart },
-  name: "Learning",
+  name: "LearningLauncher",
   methods: {
     getPrepareBody() {
       return JSON.parse(isProxy(this.prepareBody) ? toRaw(this.prepareBody) : this.prepareBody)
@@ -251,7 +251,7 @@ export default {
 
       console.info(`Launching prepare query for sites ${this.getPrepareBody()}, `, 
         JSON.stringify(this.getPrepareBody(), null, 2))
-        
+
       LearningApi.getPrepare(this.getPrepareBody(), sitesUri).then((res) => {
         if (res.status == 200) {
           this.jobID = res.data[0].job;

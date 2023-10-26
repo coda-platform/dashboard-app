@@ -54,8 +54,8 @@ const fr = {
   selectFieldTxt: "Sélectionnez les domaines",
   resources_add: "Ajouter (+)",
 
-  disable_breakdown: "Désactivé la stratification",
-  enable_breakdown: "Activer la stratification",
+  disableBreakdown: "Désactivé la stratification",
+  enableBreakdown: "Activer la stratification",
 
   selectBreakdownTxt: "Stratification",
   selectBreakdownByTxt: "Stratifier par",

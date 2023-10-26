@@ -12,8 +12,8 @@
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-12">
-          <Results v-if="showResults" :tables="tables" :figures="figures">
-          </Results>
+          <StatsResults v-if="showResults" :tables="tables" :figures="figures">
+          </StatsResults>
         </div>
       </div>
     </v-container>
@@ -21,14 +21,10 @@
 </template>
 
 <script>
-// @ is an alias to /src
-import Forest from "@/components/Forest.vue";
-import Dashboard from "@/views/Dashboard";
 import SelectData from "@/views/SelectData";
-import Connections from "@/views/Connections";
 import { bus } from "@/main";
 import SiteApi from "@/api/SiteApi";
-import Results from "./Results";
+import StatsResults from "./StatsResults";
 import GeneralApi from "../api/GeneralApi";
 
 const intersection = (...sets) =>
@@ -43,8 +39,9 @@ const getSiteKeys = (resources) =>
   }, {});
 
 export default {
+  name: "StatsLauncher",
   components: {
-    Results,
+    StatsResults,
     SelectData,
   },
   props: {},
@@ -69,22 +66,23 @@ export default {
       this.showResults = true;
     });
 
-    // bus.on("newSearch", () => {
-    //   this.component = "SelectData";
-    //
-    //   fetch('http://localhost:3000/sites') // Do not use this fetch pattern, use apis instead.
-    //       .then(res => res.json())
-    //       .then(json => json.connections)
-    //       .then(conn => this.load(conn));
-    // });
+    try {
 
-    await SiteApi.get()
-      .then((res) => res.data)
-      .then((json) => json.connections)
-      .then((conn) => this.load(conn))
-      .catch((error) => console.error(error));
+        await SiteApi.get()
+          .then((res) => res.data)
+          .then((json) => json.connections)
+          .then((conn) => this.load(conn))
+          .catch((error) => console.error(error));
 
-    await GeneralApi.Measures().then((res) => this.loadMeasures(res.data));
+      } catch (err) {
+        console.error('Could not fetch sites.', err)
+      }
+
+      try {
+        await GeneralApi.Measures().then((res) => this.loadMeasures(res.data));
+      } catch (err) {
+        console.error('Could not fetch measures.', err)
+      }
   },
   data() {
     return {

@@ -55,8 +55,8 @@ const en = {
   selectFieldTxt: "Select field(s)",
   resources_add: "Add (+)",
 
-  disable_breakdown: "Disable Breakdown",
-  enable_breakdown: "Enable Breakdown",
+  disableBreakdown: "Disable Breakdown",
+  enableBreakdown: "Enable Breakdown",
 
   selectBreakdownTxt: "Breakdown",
   selectBreakdownByTxt: "Breakdown by",
@@ -67,9 +67,9 @@ const en = {
   selectResourceAttributeSex: "Sex",
   selectResourceAttributeDeathDate: "deceasedDateTime",
 
-  breakdownStart: "start",
-  breakdownEnd: "end",
-  breakdownStep: "step",
+  breakdownStart: "Start (lower limit)",
+  breakdownEnd: "End (upper limit)",
+  breakdownStep: "Stride (step size)",
   breakdownSteps: "steps",
   breakdownDays: "days",
 

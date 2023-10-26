@@ -1,11 +1,11 @@
 // Composables
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "@/views/Home";
-import Stats from "@/views/Stats";
+import StatsLauncher from "@/views/StatsLauncher";
 import AppHeader from "@/components/AppHeader";
 import Footer from "@/components/Footer";
 import HomeMetrics from "@/views/HomeMetrics";
-import Learning from "@/views/Learning";
+import LearningLauncher from "@/views/LearningLauncher";
 import Connections from "@/views/Connections";
 import UI from "@/views/UI";
 import Forest from "@/components/Forest";
@@ -28,7 +28,7 @@ const routes = [
     name: "Stats",
     components: {
       header: AppHeader,
-      default: Stats,
+      default: StatsLauncher,
       footer: Footer,
     },
     meta: {
@@ -52,7 +52,7 @@ const routes = [
     name: "Learning",
     components: {
       header: AppHeader,
-      default: Learning,
+      default: LearningLauncher,
       footer: Footer,
     },
     meta: {

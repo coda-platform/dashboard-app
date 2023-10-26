@@ -91,7 +91,7 @@ import rangeBarchart from "@/components/rangeBarchart";
 import LineChart from "@/components/lineChart";
 
 export default {
-  name: "Results",
+  name: "StatsResults",
   components: { BarChart, rangeBarchart, LineChart },
   props: {
     tables: {
