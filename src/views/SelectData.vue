@@ -1,6 +1,32 @@
 <template>
   <v-container v-bind:class="[{ slim: minimize }, 'mainContainer']">
 
+    <div v-if="modal" class="modalOverlay">
+      <div class="modalBody">
+      <span>Select resource type: </span>
+      <select
+        class="form-control"
+        v-model="newResource"
+        style="background-color: white; margin-top: 8px;"
+      >
+        <option 
+          v-for="(option, index) in resourceTabOptions"
+          :key="index"
+          :value="option.text"
+        >
+          {{ option.text }}
+        </option>
+      </select>
+        <BButton class="mt-3" id="newTab" block @click="newTab"
+          >Add</BButton
+        >
+        <BButton class="mt-3" id="closeModal" block @click="toggleModal" 
+        style="background-color: gray; margin-right: 16px;"
+          >Close</BButton
+        >
+      </div>
+    </div>
+
     <BForm
       v-bind:class="{ inline: minimize }"
       @submit.prevent="onSubmit"
@@ -151,26 +177,9 @@
 
                 <!-- New Tab Button (Using tabs-end slot) -->
                 <template #tabs-end>
-                  <BNavItem role="presentation" href="#" v-b-modal.modal-1>
+                  <BNavItem role="presentation" href="#" @click="toggleModal">
                     <span style="font-size: 14px; padding-left: 8px;">{{ $t("resources_add") }}</span>
-                  </BNavItem
-                  >
-                  <BModal
-                    id="modal-1"
-                    ref="new-tab-modal"
-                    title="New Resource"
-                    hide-footer
-                  >
-                    <div>
-                      <BFormSelect
-                        v-model="newResource"
-                        :options="resourceTabOptions"
-                      ></BFormSelect>
-                    </div>
-                    <BButton class="mt-3" id="newTab" block @click="newTab"
-                      >Add</BButton
-                    >
-                  </BModal>
+                  </BNavItem>
                 </template>
 
                 <!-- Render this if no tabs -->
@@ -200,9 +209,8 @@
             </BButton>
 
             <div v-if="breakdown">
-            <div class="row">
-              <div class="col-lg-4 col-md-4"
-              style="display: block;">
+            <div style="padding: 8px;">
+              <div class="row">
                 <div>{{ $t("selectResourceTypeTxt") }}</div>
                 <div>
                   <select
@@ -219,9 +227,7 @@
                   </select>
                 </div>
               </div>
-              <div
-                class="col-lg-6 col-md-6"
-                style="margin-top: 16px; display: block;"
+              <div class="row"
                 v-if="this.form.breakdown.resourceType"
               >
                 <div>{{ $t("selectResourceAttributeTxt") }}</div>
@@ -245,9 +251,8 @@
               
             </div>
             
-            <div class="row" v-if="this.form.breakdown.resourceAttribute">
-              <div class="col-lg-4 col-md-4" 
-                style="margin-top: 16px;">
+            <div class="row" v-if="this.form.breakdown.resourceAttribute" style="padding: 8px;">
+              <div class="col-lg-4 col-md-4">
                 <span>{{ $t("breakdownStart") }}</span>
                 <input
                   class="form-control"
@@ -408,7 +413,7 @@ export default {
           return "number";
         } else return "date";
       } else return "date";
-    },
+    }
   },
   data() {
     return {
@@ -420,7 +425,7 @@ export default {
       allSelected: true,
       indeterminate: false,
       breakdownResourceType: undefined,
-      //patient:"",
+      modal: false,
       componentKey: this.$i18n.locale,
       form: {
         qB: [
@@ -489,6 +494,10 @@ export default {
     QueryBuilder,
   },
   methods: {
+    toggleModal: function(event) {
+      event.preventDefault();
+      this.modal = !this.modal
+    },
     getMockedSummaryData: async function () {
       return {
         summary: {
@@ -638,6 +647,7 @@ export default {
       this.breakdown = !this.breakdown
     },
     newTab() {
+      this.modal = false
       if (!this.newResource) {
         alert("Choose a resource");
         return;
@@ -652,7 +662,7 @@ export default {
         field: [],
       });
       this.newResource = "";
-      this.$refs["new-tab-modal"].hide();
+      //
     },
     removeTab(x) {
       for (let i = 0; i < this.form.qB.length; i++) {
