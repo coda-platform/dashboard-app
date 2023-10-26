@@ -151,8 +151,12 @@ export default {
   components: { LearningLineChart },
   name: "Learning",
   methods: {
+    getSelectedSitesList() {
+      console.log('Selected sites', this.selectedSites)
+      return (this.selectedSites ?? []).join(",")
+    },
     getPrepare() {
-      const sitesUri = this.selectedSites.join(",");
+      const sitesUri = this.getSelectedSitesList()
       this.isPreparing = true;
 
       console.log(sitesUri);
@@ -180,7 +184,7 @@ export default {
       this.progressInterval = setInterval(() => {
         this.getProgress();
       }, 2000);
-      const sitesUri = this.selectedSites.join(",");
+      const sitesUri = this.getSelectedSitesList()
       LearningApi.getTrain(this.trainBody, sitesUri)
         .then((res) => {
           if (res.status == 200) {
@@ -199,7 +203,7 @@ export default {
         });
     },
     getProgress() {
-      const sitesUri = this.selectedSites.join(",");
+      const sitesUri = this.getSelectedSitesList()
       LearningApi.getProgress(this.progressBody, sitesUri).then((res) => {
         if (res.status == 200) {
           this.progressResult = res.data;
@@ -212,8 +216,8 @@ export default {
       });
     },
     getEvaluate() {
-      const sitesUri = this.selectedSites.join(",");
-
+      const sitesUri = this.getSelectedSitesList()
+      
       LearningApi.getEvaluate(this.evaluateBody, sitesUri).then((res) => {
         if (res.status == 200) {
           this.evaluateCompleted = true;
@@ -231,9 +235,7 @@ export default {
       .then((json) => json.connections)
       .then((conn) => {
         this.availableSites = conn;
-        conn.forEach((conn) => {
-          this.selectedSites.push(conn.uid);
-        });
+        console.log('Available sites: ', this.availableSites)
       });
   },
   data() {
