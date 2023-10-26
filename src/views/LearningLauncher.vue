@@ -88,7 +88,7 @@
           </v-card>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!isTraining && !evaluationInProgress && !evaluateCompleted" style="padding-top: 16px">
+      <BCol lg="4" md="4" offset="1" v-if="!(isTraining || evaluationInProgress || evaluateCompleted)" style="padding-top: 16px">
         <BCard class="sitesCard">
           <BCardHeader class="cardHeader text-center">
             <div class="panelTitle">
@@ -133,7 +133,7 @@
           </BOverlay>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!isTraining">
+      <BCol lg="4" md="4" offset="1" v-if="isError">
         <div>
           <BAlert v-model="isError" variant="danger" dismissible>
             {{ errorMsg }}
@@ -316,8 +316,8 @@ export default {
             this.progressResult[0].currentRound === 
             this.progressResult[0].totalRounds) {
               console.log('Training completed')
-              this.isTraining = false;
               this.getEvaluate()
+              this.isTraining = false;
             }
           }
         } else if (res.status == 500) {
