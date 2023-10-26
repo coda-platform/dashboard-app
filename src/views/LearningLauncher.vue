@@ -23,7 +23,8 @@
                     style="color: black;"
                   ></textarea>
                 </BFormGroup>
-                <BButton block variant="success" @click="getPrepare" class="prepareButton">
+                <BButton block variant="success" @click="getPrepare" class="prepareButton"
+                :disabled="isPrepareButtonDisabled">
                   {{ $t("sendPrepareTxt") }}
                   <span v-if="isPreparing">(Please wait...)</span></BButton
                 >
@@ -31,7 +32,21 @@
             </div>
           </v-card>
         </BRow>
-
+        <BRow v-if="showCountResult">
+          <v-card class="resultContainer">
+            <div class="panelTitle">
+              <span>{{ $t("countResultTxt") }}</span>
+            </div>
+            <div>
+              <BTable
+                striped
+                hover
+                :items="countResult"
+                :fields="countFields"
+              ></BTable>
+            </div>
+          </v-card>
+        </BRow>
         <BRow v-if="showTrainInput">
           <v-card class="learningContainer">
             <div class="panelTitle">
@@ -61,21 +76,7 @@
             </div>
           </v-card>
         </BRow>
-        <BRow v-if="showCountResult">
-          <v-card class="resultContainer">
-            <div class="panelTitle">
-              <span>{{ $t("countResultTxt") }}</span>
-            </div>
-            <div>
-              <BTable
-                striped
-                hover
-                :items="countResult"
-                :fields="countFields"
-              ></BTable>
-            </div>
-          </v-card>
-        </BRow>
+        
         <BRow v-if="evaluateCompleted">
           <v-card class="resultContainer">
             <div class="panelTitle">
@@ -91,7 +92,7 @@
         <BCard class="sitesCard">
           <BCardHeader class="cardHeader text-center">
             <div class="panelTitle">
-              <span>{{ $t("activeConnectionsTxt") }}</span>
+              <span>Select Hospital Sites:</span>
             </div>
           </BCardHeader>
           <BCardBody class="sitesCardBody">
@@ -299,10 +300,16 @@ export default {
           if (this.evaluateCompleted) {
             console.log('Evaluate completed')
             clearInterval(this.progressInterval);
+            return
+          }
+          if (this.errorMsg) {
+            console.log('Aborting due to error')
+            clearInterval(this.progressInterval);
+            return
           }
           this.progressResult = res.data;
           console.log('Training progress: ', toRaw(this.progressResult))
-
+          
           if (this.progressResult.length != 0) {
             this.showGraphLoading = false;
             if (this.progressResult[0] && 
@@ -329,10 +336,19 @@ export default {
       }
       try {
         console.log('Evaluate requested')
-        LearningApi.getEvaluate(this.evaluateBody, sitesUri).then(() => {
-          console.log('Evaluate completed')
-          this.evaluateCompleted = true;
-          this.evaluationInProgress = false;
+        LearningApi.getEvaluate(this.evaluateBody, sitesUri).then((res) => {
+          if (res.status == 200) {
+            this.evaluateCompleted = true;
+            this.evaluationInProgress = false;
+            this.evaluateResult = res.data;
+            console.log('Evaluate completed')
+          } else if (res.status == 500) {
+            this.isError = true;
+            this.errorMsg = res.message;
+            this.evaluateCompleted = false;
+            this.evaluationInProgress = false;
+            console.error('Evaluate errored', res.message)
+          }
         });
       } catch (err) {
         this.isError = true;
