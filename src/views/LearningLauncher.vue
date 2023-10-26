@@ -122,6 +122,7 @@
               <BCardHeader class="cardHeader">{{ metric.name }}</BCardHeader>
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
+                  :key="chartKey" 
                   :dataToPlot="metric"
                   :data="progressResult"
                 ></LearningLineChart>
@@ -301,6 +302,7 @@ export default {
           this.progressResult = res.data;
           this.inProgress = true;
           if (this.progressResult.length != 0) this.showGraphLoading = false;
+          this.chartKey++
         } else if (res.status == 500) {
           this.isError = true;
           this.errorMsg = res.message;
@@ -349,6 +351,7 @@ export default {
   },
   data() {
     return {
+      chartKey: 0,
       isError: false,
       errorMsg: "",
       trainBody: "",
