@@ -87,7 +87,7 @@
           </v-card>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!trainingInProgress" style="padding-top: 16px">
+      <BCol lg="4" md="4" offset="1" v-if="!isTraining" style="padding-top: 16px">
         <BCard class="sitesCard">
           <BCardHeader class="cardHeader text-center">
             <div class="panelTitle">
@@ -270,54 +270,48 @@ export default {
       });
     },
     getTrain() {
+
+      if (this.isTraining) return
+
       this.progressResult = [];
       this.isTrainButtonDisabled = true;
       this.isTraining = true;
 
-      this.getProgress();
       this.progressInterval = setInterval(() => {
         this.getProgress();
       }, 2000);
 
       const sitesUri = this.getSelectedSitesList()
-      LearningApi.getTrain(this.trainBody, sitesUri)
-        .then((res) => {
-          if (res.status == 200) {
-            clearInterval(this.progressInterval);
-            this.getProgress();
-            this.getEvaluate();
-            this.isTraining = false;
-          } else if (res.status == 500) {
-            this.isError = true;
-            this.errorMsg = res.message;
-          }
-        })
-        .catch((error) => {
-          console.log("Error during training: ", error);
-          this.isTraining = false;
-        });
+      try {
+        LearningApi.getTrain(this.trainBody, sitesUri)
+      } catch (err) {
+        console.log("Error during training: ", err);
+        this.isTraining = false;
+        clearInterval(this.progressInterval)
+      }
+      
     },
     getProgress() {
       const sitesUri = this.getSelectedSitesList()
       LearningApi.getProgress(this.progressBody, sitesUri).then((res) => {
         if (res.status == 200) {
           if (this.evaluateCompleted) {
+            console.log('Evaluate completed')
             clearInterval(this.progressInterval);
           }
           this.progressResult = res.data;
-          if (this.progressResult[0] && 
-            this.progressResult[0].currentRound === 
-            this.progressResult[0].totalRounds) {
-            this.trainingInProgress = false;
-            this.getEvaluate()
-          } else {
-            this.trainingInProgress = true;
-          }
+          console.log("Progress: ", this.progressResult)
+
           if (this.progressResult.length != 0) {
             this.showGraphLoading = false;
+            if (this.progressResult[0] && 
+            this.progressResult[0].currentRound === 
+            this.progressResult[0].totalRounds) {
+              console.log('Training completed')
+              this.isTraining = false;
+              this.getEvaluate()
+            }
           }
-          this.chartKey++
-          console.log("Progress: ", this.progressResult)
         } else if (res.status == 500) {
           this.isError = true;
           this.errorMsg = res.message;
@@ -379,7 +373,6 @@ export default {
       showTrainInput: false,
       showCountResult: false,
       isTrainButtonDisabled: false,
-      trainingInProgress: false,
       evaluationInProgress: false,
       isPreparing: false,
       isTraining: false,
