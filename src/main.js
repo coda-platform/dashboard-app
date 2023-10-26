@@ -26,6 +26,7 @@ configureCompat({
   RENDER_FUNCTION: false,
   WATCH_ARRAY: false,
   COMPONENT_ASYNC: false,
+  ATTR_FALSE_VALUE: false
 });
 
 app.mixin({

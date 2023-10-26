@@ -51,6 +51,7 @@
                 <BButton
                   block
                   variant="success"
+                  class="trainButton"
                   @click="getTrain"
                   :disabled="isTrainButtonDisabled"
                   >{{ $t("sendTrainTxt") }}
@@ -146,6 +147,91 @@ import { isProxy, toRaw } from 'vue'
 import LearningApi from "@/api/LearningApi";
 import LearningLineChart from "../components/LearningLineChart.vue";
 import SiteApi from "@/api/SiteApi";
+
+const defaultPrepareBody = `{
+  "selectors": [
+    {
+      "resource": "Patient",
+      "label": "PA",
+      "limit": 1000,
+      "filters": [],
+      "fields": [
+        {
+          "path": "gender",
+          "label": "gender",
+          "type": "string"
+        },
+        {
+          "path": "age",
+          "label": "age",
+          "type": "integer"
+        },
+        {
+          "path": "isDeceased",
+          "label": "isDeceased",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "resource": "Observation",
+      "label": "OB",
+      "filters": [
+        {
+          "path": "code.coding.code",
+          "operator": "is",
+          "value": "20570-8",
+          "type": "string"
+        }
+      ],
+      "fields": [
+        {
+          "path": "value.Quantity.value",
+          "label": "hematocrit",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "model": {
+      "class_name": "Sequential",
+      "config": {
+        "name": "sequential_1",
+        "layers": [
+          "etc..."
+        ]
+      }
+    },
+    "inputs": [
+      "gender",
+      "age",
+      "hematocrit"
+    ],
+    "outputs": [
+      "isDeceased"
+    ],
+    "optimizer": {
+      "name": "adam",
+      "parameters": {
+        "learning_rate": 0.00025,
+        "validation_split": 0.33,
+        "evaluation_split": 0.2,
+        "epochs": 1,
+        "batch_size": 2,
+        "shuffle": 1000
+      }
+    },
+    "compiler": {
+      "parameters": {
+        "loss": "binaryCrossentropy",
+        "metrics": [
+          "accuracy"
+        ]
+      }
+    }
+  }
+}`
 
 export default {
   components: { LearningLineChart },
@@ -287,91 +373,7 @@ export default {
       evaluateResult: [],
       countResult: [],
       jobID: "",
-      prepareBody: `
-      {
-    "selectors": [
-        {
-            "resource": "Patient",
-            "label": "PA",
-            "limit": 1000,
-            "filters": [],
-            "fields": [
-                {
-                    "path": "gender",
-                    "label": "gender",
-                    "type": "string"
-                },
-                {
-                    "path": "age",
-                    "label": "age",
-                    "type": "integer"
-                },
-                {
-                    "path": "isDeceased",
-                    "label": "isDeceased",
-                    "type": "boolean"
-                }
-            ]
-        },
-        {
-            "resource": "Observation",
-            "label": "OB",
-            "filters": [
-                {
-                    "path": "code.coding.code",
-                    "operator": "is",
-                    "value": "20570-8",
-                    "type": "string"
-                }
-            ],
-            "fields": [
-                {
-                    "path": "value.Quantity.value",
-                    "label": "hematocrit",
-                    "type": "integer"
-                }
-            ]
-        }
-    ],
-    "options": {
-        "model": {
-            "class_name": "Sequential",
-            "config": {
-                "name": "sequential_1",
-                "layers": [
-                    "etc..."
-                ]
-            }
-        },
-        "inputs": [
-            "gender",
-            "age",
-            "hematocrit"
-        ],
-        "outputs": [
-            "isDeceased"
-        ],
-        "optimizer": {
-            "name": "adam",
-            "parameters": {
-                "learning_rate": 0.00025,
-                "validation_split": 0.33,
-                "evaluation_split": 0.2,
-                "epochs": 1,
-                "batch_size": 2,
-                "shuffle": 1000
-            }
-        },
-        "compiler": {
-            "parameters": {
-                "loss": "binaryCrossentropy",
-                "metrics": [
-                    "accuracy"
-                ]
-            }
-        }
-    }
-}`,
+      prepareBody: defaultPrepareBody,
     };
   },
   computed: {
