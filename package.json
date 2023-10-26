@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --port 3001",
     "build": "vite build",
     "preview": "vite preview",
+    "dev": "vite --port 8080",
+    "serve": "vite --port 8080",
     "lint": "eslint . --fix --ignore-path .gitignore",
     "caprover:setup": "node ./caprover/setup.js",
     "caprover:deploy": "node ./caprover/deploy.js"

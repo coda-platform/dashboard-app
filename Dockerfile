@@ -30,18 +30,5 @@ RUN cat .env
 RUN npm install
 RUN npm run build
 
-FROM node:18-alpine
-RUN npm install -g http-server
-
-RUN apk update \
-    && apk add openssl
-
-WORKDIR /usr/src/app
-COPY --from=base-node-modules /usr/src/build ./
-
-# Make build footprint version for easier debugging.
-RUN rm ./version.txt
-RUN openssl rand -hex 12 > version.txt
-
 EXPOSE 8080
-CMD [ "http-server", "--port", "8080",  "dist" ]
+CMD [ "npm", "run", "serve" ]
