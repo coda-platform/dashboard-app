@@ -152,7 +152,7 @@ export default {
   name: "Learning",
   methods: {
     getPrepareBody() {
-      return isProxy(this.prepareBody) ? toRaw(this.prepareBody) : this.prepareBody
+      return JSON.parse(isProxy(this.prepareBody) ? toRaw(this.prepareBody) : this.prepareBody)
     },
     getSelectedSitesList() {
       const rawData = this.selectedSites
