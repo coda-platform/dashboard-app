@@ -1,4 +1,4 @@
-FROM node:16-alpine3.13 as base-node-modules
+FROM node:18-alpine as base-node-modules
 
 WORKDIR /usr/src/build
 
@@ -27,12 +27,10 @@ RUN echo "VITE_CODA_DASHBOARD_APP_AUTH_CLIENT_ID=${CODA_DASHBOARD_APP_AUTH_CLIEN
 RUN echo "VITE_CODA_AUTH_SERVICE_URL=${CODA_AUTH_SERVICE_URL}" >> .env
 RUN cat .env
 
-RUN yarn cache clean
-RUN yarn install
-RUN rm -f .npmrc
-RUN yarn build
+RUN npm install
+RUN npm run build
 
-FROM node:16-alpine3.13
+FROM node:18-alpine
 RUN npm install -g http-server
 
 RUN apk update \
