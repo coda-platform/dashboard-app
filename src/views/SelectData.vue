@@ -246,7 +246,6 @@
 </template>
 
 <script>
-import "vue-slider-component/theme/default.css";
 import { bus } from "@/main";
 import _ from "underscore";
 import Multiselect from "vue-multiselect";

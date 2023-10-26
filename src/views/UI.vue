@@ -19,7 +19,7 @@
             </BFormGroup>
             <BFormGroup id="input-group-selectData4">
               <p>{{$t('selectDaysTxt')}} </p>
-              <vue-slider v-model="value" :enable-cross="false"></vue-slider>
+              <!-- removed vue slider, incompatible with vue 3 -->
             </BFormGroup>
             <BFormGroup>
 
@@ -61,12 +61,9 @@
 </template>
 
 <script>
-import VueSlider from 'vue-slider-component'
-import 'vue-slider-component/theme/default.css'
 import { bus } from "@/main"
 import _ from 'underscore'
 import GeneralApi from "../api/GeneralApi";
-
 
 export default {
   name: "AppHeader",
@@ -106,9 +103,7 @@ export default {
       sites: []
     };
   },
-  components: {
-    VueSlider
-  },
+  components: {},
   mounted(){
     this.sites = _.map(this.sitesOptions, opt=>{
       return opt.value
