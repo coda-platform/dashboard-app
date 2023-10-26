@@ -15,7 +15,7 @@
               i === '1'
                 ? $t('home_positivity', { positivity: tile.rate })
                 : $t('home_average', { average: tile.average }) +
-                  $t('home_rt', { rate: tile.rt })
+                  ' – ' + $t('home_rt', { rate: tile.rt })
             "
             :data="tile.total"
           ></HomeTextTile>

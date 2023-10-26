@@ -7,9 +7,9 @@ const en = {
   home_new_case: "New cases today",
   home_daily_death: "New deaths today",
 
-  home_positive_rate_per_site: "Positivity rate over time",
-  home_new_case_per_site: "Positive cases over time",
-  home_hospitalisation_rate: "Hospitalizations over time",
+  home_positive_rate_per_site: "Positivity rate (past 6 months)",
+  home_new_case_per_site: "Positive cases (past 30 days)",
+  home_hospitalisation_rate: "Hospitalizations (past 7 days)",
 
   icu: "Intensive care bed occupation",
   hospitalization: "Hospital bed occupation",
@@ -19,8 +19,8 @@ const en = {
   age: "Distribution of age by site",
   "h/f": "Distribution of sex by COVID status",
 
-  home_positivity: " Positivity Rate:{positivity} %",
-  home_average: "Avg. float. {average}",
+  home_positivity: " Positivity Rate: {positivity} %",
+  home_average: "Floating Avg. {average}",
   home_rt: " Rate Rt. {rate}",
 
   covid_cases: "Number of covid cases",
