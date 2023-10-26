@@ -7,6 +7,10 @@ RUN apk update \
 
 COPY ./ ./
 
+# Make build footprint version for easier debugging.
+RUN rm ./version.txt
+RUN openssl rand -hex 12 > version.txt
+
 RUN apk --no-cache add git
 RUN git submodule update --init --recursive
 
