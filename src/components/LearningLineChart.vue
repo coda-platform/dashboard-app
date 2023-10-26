@@ -29,51 +29,46 @@ export default {
   props: {
     dataValues: Array,
     dataToPlot: Object,
+    sites: Array
   },
   data() {
     return {
-      sites: [],
       series: [],
-      filters: []
+      dataset: {},
+      xAxis: [],
     };
   },
   methods: {
     onResize() {
       this.$refs.MultiLineChart.resize();
     },
-    datasetTransform: function () {
-      let filters = [];
-      if (this.sites.length == 0) {
-        this.dataValues.forEach((el) => {
+
+    getSites: function () {
+      this.dataValues.forEach((el) => {
           if (!this.sites.includes(el.siteCode)) {
             this.sites.push(el.siteCode);
           }
-        });
-      }
+      });
+    },
+    datasetTransform: function () {
+      let metric = this.dataToPlot.value;
 
-      filters.push({
-        id: "dataset_raw",
-        source: this.dataValues,
-      });
+      // if(this.sites.length == 0) {
+      //   this.getSites();
+      // };
+
       this.sites.forEach((site) => {
-        const filter = {
-          id: `dataset_for_site_${site}`,
-          fromDatasetId: "dataset_raw",
-          transform: [
-            {
-              type: "filter",
-              config: { dimension: "siteCode", value: site },
-            },
-            {
-              type: "sort",
-              config: { dimension: "currentRound", order: "asc" },
-            },
-          ],
-        };
-        filters.push(filter);
-      });
-      this.filters = filters
-      return filters;
+        this.dataset[site] = [] //make an array in dateset for each site
+      })
+      this.dataValues.forEach((data) => { //push each line of data into right site
+        this.dataset[data.siteCode].push(data[metric])
+      })
+      for (var site in this.dataset) {
+        if (site)
+          this.dataset[site].sort((a, b) => (a - b)); //sort numbers
+      }
+      this.xAxis = this.range(1, this.dataset[this.sites[0]].length, 1);
+      return this.dataset;
     },
     datasetSeries: function () {
       let series = [];
@@ -88,21 +83,19 @@ export default {
       this.sites.forEach((site) => {
         const serie = {
           type: "line",
-          //smooth: true,
           name: site,
-          datasetId: `dataset_for_site_${site}`,
           showSymbol: true,
-          encode: {
-            x: "currentRound",
-            y: this.dataToPlot.value,
-            itemName: "rounds",
-          },
+          data: this.dataset[site],
         };
         series.push(serie);
       });
       this.series = series
       return series;
     },
+
+  range: function (start, stop, step) { 
+    return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
+  },
   },
   mounted() {
     window.addEventListener("resize", this.onResize);
@@ -112,12 +105,11 @@ export default {
   },
   computed: {
     option() {
+      this.getSites()
       this.datasetTransform()
       this.datasetSeries()
-      console.log('option called', this.filters, this.series)
       return {
-        dataset: JSON.parse(JSON.stringify(this.filters)),
-        series: JSON.parse(JSON.stringify(this.series)),
+        series: this.series,
         legend: { data: this.sites },
         tooltip: { trigger: "axis" },
         grid: { bottom: "3%", containLabel: true },
@@ -125,6 +117,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
+          data: this.xAxis
         },
         yAxis: {
           type: "value",

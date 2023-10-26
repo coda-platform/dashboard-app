@@ -125,6 +125,7 @@
                   :key="metric.name + '-' + chartKey.toString()"
                   :dataToPlot="metric"
                   :dataValues="progressResult"
+                  :sites="selectedSites"
                 ></LearningLineChart>
               </BCardBody>
             </BCard>
