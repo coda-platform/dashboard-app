@@ -109,8 +109,8 @@
           </BCardBody>
         </BCard>
       </BCol>
-      <BCol lg="5" md="8" offset="1" v-if="inProgress">
-        <BRow v-for="metric in metrics" :key="metric.name">
+      <BCol lg="5" md="8" offset="1" v-if="inProgress" :key="chartKey">
+        <BRow v-for="metric in metrics" v-bind:key="metric.name">
           <BOverlay
             :show="showGraphLoading"
             spinner-variant="primary"
@@ -122,7 +122,6 @@
               <BCardHeader class="cardHeader">{{ metric.name }}</BCardHeader>
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
-                  :key="chartKey" 
                   :dataToPlot="metric"
                   :data="progressResult"
                 ></LearningLineChart>
@@ -303,6 +302,7 @@ export default {
           this.inProgress = true;
           if (this.progressResult.length != 0) this.showGraphLoading = false;
           this.chartKey++
+          console.log("Progress: ", this.progressResult)
         } else if (res.status == 500) {
           this.isError = true;
           this.errorMsg = res.message;
