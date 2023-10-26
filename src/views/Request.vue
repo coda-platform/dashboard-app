@@ -6,7 +6,7 @@
     <div class="text">
       <p>{{ $t("requestAccessDescriptionTxt") }}</p>
       <a :href="$t('mailRequestAccessTxt')" target="_blank"
-        >adresse_a_determiner@coda.ca</a
+        >team@coda-platform.com</a
       >
     </div>
   </v-container>
