@@ -122,6 +122,7 @@
               <BCardHeader class="cardHeader">{{ metric.name }}</BCardHeader>
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
+                  :key="metric.name + '-' + chartKey.toString()"
                   :dataToPlot="metric"
                   :dataValues="progressResult"
                 ></LearningLineChart>

@@ -1,5 +1,5 @@
 <template>
-  <v-chart class="chart" ref="MultiLineChart" :option="option" />
+  <v-chart class="chart" ref="LearningLineChart" :option="option" />
 </template>
 
 <script>
@@ -24,7 +24,7 @@ use([
 ]);
 
 export default {
-  name: "MultiLineChart",
+  name: "LearningLineChart",
   components: { VChart },
   props: {
     dataValues: Array,
@@ -33,6 +33,8 @@ export default {
   data() {
     return {
       sites: [],
+      series: [],
+      filters: []
     };
   },
   methods: {
@@ -70,6 +72,7 @@ export default {
         };
         filters.push(filter);
       });
+      this.filters = filters
       return filters;
     },
     datasetSeries: function () {
@@ -78,6 +81,7 @@ export default {
         this.dataValues.forEach((el) => {
           if (!this.sites.includes(el.siteCode)) {
             this.sites.push(el.siteCode);
+            this.series[el.siteCode] = [];
           }
         });
       }
@@ -96,6 +100,7 @@ export default {
         };
         series.push(serie);
       });
+      this.series = series
       return series;
     },
   },
@@ -107,9 +112,12 @@ export default {
   },
   computed: {
     option() {
+      this.datasetTransform()
+      this.datasetSeries()
+      console.log('option called', this.filters, this.series)
       return {
-        dataset: this.datasetTransform(),
-        series: this.datasetSeries(),
+        dataset: this.filters,
+        series: this.series,
         legend: { data: this.sites },
         tooltip: { trigger: "axis" },
         grid: { bottom: "3%", containLabel: true },
