@@ -67,54 +67,39 @@ const createAndMountApp = async (keycloak) => {
 
 }
 
-if (process.env.NODE_ENV === "development") {
-
-  keycloak
-    .init({ checkLoginIframe: false })
-    .then(async () => {
+keycloak
+  .init({ onLoad: "login-required" })
+  .then(async (auth) => {
+    if (!auth) {
+      window.location.reload();
+    } else {
       app.$log.info("Authenticated");
 
       TokenContext.setToken(keycloak.token);
       createAndMountApp(keycloak)
-    })
 
-} else {
+    }
 
-  keycloak
-    .init({ onLoad: "login-required" })
-    .then(async (auth) => {
-      if (!auth) {
-        window.location.reload();
-      } else {
-        app.$log.info("Authenticated");
-
-        TokenContext.setToken(keycloak.token);
-        createAndMountApp(keycloak)
-
-      }
-
-      // Token refresh
-      setInterval(() => {
-        keycloak
-          .updateToken(70)
-          .then((refreshed) => {
-            if (refreshed) {
-              app.$log.info("Token refreshed" + refreshed);
-              TokenContext.setToken(keycloak.token);
-            } else {
-              app.$log.info("Token not");
-              app.$log.warn('Token not refreshed, valid for ' +
-                Math.round(keycloak.tokenParsed.exp +
-                  keycloak.timeSkew - new Date().getTime() / 1000) +
-                ' seconds');
-            }
-          })
-          .catch(() => {
-            app.$log.error("Failed to refresh token");
-          });
-      }, 6000)
-    })
-    .catch(() => {
-      app.$log.error("Authenticated Failed");
-    });
-}
+    // Token refresh
+    setInterval(() => {
+      keycloak
+        .updateToken(70)
+        .then((refreshed) => {
+          if (refreshed) {
+            app.$log.info("Token refreshed" + refreshed);
+            TokenContext.setToken(keycloak.token);
+          } else {
+            app.$log.warn('Token not refreshed, valid for ' +
+              Math.round(keycloak.tokenParsed.exp +
+                keycloak.timeSkew - new Date().getTime() / 1000) +
+              ' seconds');
+          }
+        })
+        .catch(() => {
+          app.$log.error("Failed to refresh token");
+        });
+    }, 6000)
+  })
+  .catch(() => {
+    app.$log.error("Authenticated Failed");
+  })

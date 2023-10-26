@@ -46,7 +46,7 @@ const en = {
   filters: "Filters",
   fields: "Fields",
 
-  selectMeasuresTxt: "Select measures to retrive:",
+  selectMeasuresTxt: "Select measures to retrieve:",
   continuous: "Continuous variables",
   discreet: "Discreet",
   addNewMeasure: "+ Add New Measure",
