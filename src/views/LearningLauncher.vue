@@ -109,7 +109,7 @@
           </BCardBody>
         </BCard>
       </BCol>
-      <BCol lg="5" md="8" offset="1" v-if="inProgress" :key="chartKey">
+      <BCol lg="5" md="8" offset="1" v-if="isTraining" :key="chartKey">
         <BRow v-for="metric in metrics" v-bind:key="metric.name">
           <BOverlay
             :show="showGraphLoading"
@@ -132,7 +132,7 @@
           </BOverlay>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!inProgress">
+      <BCol lg="4" md="4" offset="1" v-if="!isTraining">
         <div>
           <BAlert v-model="isError" variant="danger" dismissible>
             {{ errorMsg }}
@@ -300,7 +300,7 @@ export default {
             clearInterval(this.progressInterval);
           }
           this.progressResult = res.data;
-          console.log("Progress: ", this.progressResult)
+          console.log('Training progress: ', toRaw(this.progressResult))
 
           if (this.progressResult.length != 0) {
             this.showGraphLoading = false;
@@ -319,6 +319,7 @@ export default {
       });
     },
     getEvaluate() {
+      console.log('Evaluate called')
       const sitesUri = this.getSelectedSitesList()
       if (this.evaluationInProgress || this.evaluateCompleted) {
         return
@@ -326,7 +327,12 @@ export default {
         this.evaluationInProgress = true
       }
       try {
-        LearningApi.getEvaluate(this.evaluateBody, sitesUri);
+        console.log('Evaluate requested')
+        LearningApi.getEvaluate(this.evaluateBody, sitesUri).then(() => {
+          console.log('Evaluate completed')
+          this.evaluateCompleted = true;
+          this.evaluationInProgress = false;
+        });
       } catch (err) {
         this.isError = true;
         this.errorMsg = err.message;
