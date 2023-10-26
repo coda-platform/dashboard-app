@@ -99,7 +99,6 @@
                 class="sites-checkbox"
                 v-model="selectedSites"
                 v-for="availableSite in availableSites"
-                :options="availableSite.uid"
                 :key="availableSite.uid"
                 :value="availableSite.uid"
               >
@@ -264,90 +263,90 @@ export default {
       evaluateResult: [],
       countResult: [],
       jobID: "",
-      prepareBody: `{
-  "selectors": [
-    {
-      "resource": "Patient",
-      "label": "PA",
-      "limit": 1000,
-      "filters": [
-      ],
-      "fields": [
+      prepareBody: `
+      {
+    "selectors": [
         {
-          "path":"gender",
-          "label": "gender",
-          "type": "string"
+            "resource": "Patient",
+            "label": "PA",
+            "limit": 1000,
+            "filters": [],
+            "fields": [
+                {
+                    "path": "gender",
+                    "label": "gender",
+                    "type": "string"
+                },
+                {
+                    "path": "age",
+                    "label": "age",
+                    "type": "integer"
+                },
+                {
+                    "path": "isDeceased",
+                    "label": "isDeceased",
+                    "type": "boolean"
+                }
+            ]
         },
         {
-          "path":"age",
-          "label":"age",
-          "type": "integer"
+            "resource": "Observation",
+            "label": "OB",
+            "filters": [
+                {
+                    "path": "code.coding.code",
+                    "operator": "is",
+                    "value": "20570-8",
+                    "type": "string"
+                }
+            ],
+            "fields": [
+                {
+                    "path": "value.Quantity.value",
+                    "label": "hematocrit",
+                    "type": "integer"
+                }
+            ]
+        }
+    ],
+    "options": {
+        "model": {
+            "class_name": "Sequential",
+            "config": {
+                "name": "sequential_1",
+                "layers": [
+                    "etc..."
+                ]
+            }
         },
-        {
-          "path":"isDeceased",
-          "label":"isDeceased",
-          "type": "boolean"
+        "inputs": [
+            "gender",
+            "age",
+            "hematocrit"
+        ],
+        "outputs": [
+            "isDeceased"
+        ],
+        "optimizer": {
+            "name": "adam",
+            "parameters": {
+                "learning_rate": 0.00025,
+                "validation_split": 0.33,
+                "evaluation_split": 0.2,
+                "epochs": 1,
+                "batch_size": 2,
+                "shuffle": 1000
+            }
+        },
+        "compiler": {
+            "parameters": {
+                "loss": "binaryCrossentropy",
+                "metrics": [
+                    "accuracy"
+                ]
+            }
         }
-      ]
-    },
-    {
-      "resource": "Observation",
-      "label": "OB",
-      "filters": [
-        {
-          "path": "code.coding.code",
-          "operator": "is",
-          "value": "20570-8",
-          "type": "string"
-        }
-      ],
-      "fields": [
-        {
-          "path":"value.Quantity.value",
-          "label": "hematocrit",
-          "type": "integer"
-        }
-      ]
     }
-  ],
-  "options": {
-    "model": {
-      "class_name": "Sequential",
-      "config": {
-        "name": "sequential_1",
-        "layers": [
-            "A default model will be used for this demo."
-        ]
-      }
-    },
-    "inputs": [
-      "gender",
-      "age",
-      "hematocrit"
-    ],
-    "outputs": [
-      "isDeceased"
-    ],
-    "optimizer": {
-      "name": "adam",
-      "parameters": {
-        "learning_rate": 0.00025,
-        "validation_split": 0.33,
-        "evaluation_split": 0.2,
-        "epochs": 1,
-        "batch_size": 2,
-        "shuffle": 1000
-      }
-    },
-    "compiler": {
-      "parameters": {
-        "loss": "binaryCrossentropy",
-        "metrics": [
-          "accuracy"
-        ]
-      }
-    }
-  }
 }`,
     };
   },
