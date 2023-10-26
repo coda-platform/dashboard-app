@@ -46,8 +46,8 @@ const en = {
   filters: "Filters",
   fields: "Fields",
 
-  selectMeasuresTxt: "Measures",
-  continuous: "Continuous",
+  selectMeasuresTxt: "Select measures to retrive:",
+  continuous: "Continuous variables",
   discreet: "Discreet",
   addNewMeasure: "+ Add New Measure",
 
@@ -73,8 +73,8 @@ const en = {
   breakdownSteps: "steps",
   breakdownDays: "days",
 
-  contTxt: "Continuous",
-  discTxt: "Discrete",
+  contTxt: "Continuous variables (e.g. age)",
+  discTxt: "Discrete (e.g. gender)",
   selectContTxt: "Select continuous measure(s)",
   selectDiscTxt: "Select discrete measure(s) ",
 
@@ -129,7 +129,7 @@ const en = {
   hubNotConnectedTxt: "HUB Disconnected",
   homeMetricsTxt: "HM",
   learningTitle: "Learning",
-  federated_simulation: "Federated Simulation",
+  federated_simulation: "Launch a federated learning model.",
 
   requestAccessDescriptionTxt: " To get access to CODA, contact this person",
   mailRequestAccessTxt:

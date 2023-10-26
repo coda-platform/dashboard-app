@@ -15,7 +15,7 @@ body {
 }
 
 #app {
-  font-family: Inter, Helvetica, Arial, sans-serif;
+  font-family: Inter, Helvetica, Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* text-align: center; */
@@ -43,6 +43,14 @@ body {
 .selectData {
   width: 100%;
   margin: 20px auto;
+
+  .selectContainer {
+    overflow: visible;
+  }
+  .multiselect__content-wrapper {
+    z-index: 999;
+    max-height: none;
+  }
 }
 
 .selectContainer,
@@ -54,12 +62,12 @@ body {
     margin: 10px;
     font-weight: bolder;
   }
-
   .selectionPanel {
     padding: 16px;
     border-radius: 4px;
     width: 100%;
     border-width: 0px;
+    overflow: visible;
   }
   .resultPanel {
     border-top: 1px solid #e5e5e5;
@@ -68,6 +76,7 @@ body {
 
     .subPanel {
       margin-bottom: 10px;
+      overflow: visible;
     }
 
     button {
@@ -118,11 +127,30 @@ body {
 
 .submit-btn {
   margin: auto;
-
   .btn-success:disabled {
     cursor: unset;
+    background-color: #d3dddb;
+    color: #ababab;
+  }
+  .btn {
+    border-radius: 4px;
+    border-width: 0;
+    background-color: #19a68d;
   }
 }
+
+.rules-group-container {
+  .btn-success {
+    background-color:#19a68d !important;
+  }
+}
+
+.rule-actions {
+  .btn-danger {
+    margin-top: 4px;
+  }
+}
+
 .connectedPanel {
   text-align: left;
   background-color: aliceblue;
@@ -209,11 +237,22 @@ body {
   font-size: 14px;
 }
 
+.card-header-tabs .nav-link.active {
+  padding: 16px !important;
+}
+
+.card-header-tabs .nav-link {
+  font-weight: bold;
+  padding: 16px !important;
+}
 .tab-content {
   border-width: 0;
   background-color: white;
 }
-
+.router-link-active {
+  font-weight: medium;
+  text-decoration: underline;
+}
 #langBtn {
   margin: auto 15px;
 
@@ -275,7 +314,7 @@ body {
     margin-right: 12px;
     vertical-align: middle;
     background-color: inherit;
-    color: #017b5f;
+    color: #19a68d;
     //border: 1px solid #000000;
     border-radius: 4px;
   }
@@ -408,5 +447,11 @@ body {
   }
 }
 
-.error-alert {
+.prepareButton {
+  background-color: #19a68d; 
+  color: white !important; 
+  margin: 10px;
+  border-width: 0;
+  font-weight: bold;
+  float: right;
 }

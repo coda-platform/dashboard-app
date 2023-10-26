@@ -12,19 +12,19 @@
             <div class="panelTitle">
               <span>{{ $t("prepareRequestTxt") }}</span>
             </div>
-
             <div class="preparePanel">
               <div class="prepare">
                 <BFormGroup id="learningPrepareBodyForm">
-                  <BFormTextarea
+                  <textarea
                     id="learningPrepareBodyTextArea"
                     size="sm"
                     v-model="prepareBody"
                     rows="20"
-                  ></BFormTextarea>
+                    style="color: black;"
+                  ></textarea>
                 </BFormGroup>
-                <BButton block variant="success" @click="getPrepare"
-                  >{{ $t("sendPrepareTxt") }}
+                <BButton block variant="success" @click="getPrepare" class="prepareButton">
+                  {{ $t("sendPrepareTxt") }}
                   <span v-if="isPreparing">(loading)</span></BButton
                 >
               </div>
@@ -41,12 +41,12 @@
             <div class="preparePanel">
               <div class="train">
                 <BFormGroup id="learningTrainBodyForm">
-                  <BFormTextarea
+                  <textarea
                     id="learningTrainBodyTextArea"
                     size="sm"
                     v-model="trainBody"
                     rows="3"
-                  ></BFormTextarea>
+                  ></textarea>
                 </BFormGroup>
                 <BButton
                   block
@@ -86,11 +86,13 @@
           </v-card>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!inProgress">
+      <BCol lg="4" md="4" offset="1" v-if="!inProgress" style="padding-top: 16px">
         <BCard class="sitesCard">
-          <BCardHeader class="cardHeader text-center">{{
-            $t("activeConnectionsTxt")
-          }}</BCardHeader>
+          <BCardHeader class="cardHeader text-center">
+            <div class="panelTitle">
+              <span>{{ $t("activeConnectionsTxt") }}</span>
+            </div>
+          </BCardHeader>
           <BCardBody class="sitesCardBody">
             <BFormGroup>
               <BFormCheckbox
@@ -145,6 +147,7 @@
 import LearningApi from "@/api/LearningApi";
 import SiteApi from "@/api/SiteApi";
 import LearningLineChart from "../components/LearningLineChart.vue";
+
 export default {
   components: { LearningLineChart },
   name: "Learning",
@@ -262,90 +265,90 @@ export default {
       countResult: [],
       jobID: "",
       prepareBody: `{
-        "selectors": [
-          {
-            "resource": "Patient",
-            "label": "PA",
-            "limit": 1000,
-            "filters": [
-            ],
-            "fields": [
-              {
-                "path":"gender",
-                "label": "gender",
-                "type": "string"
-              },
-              {
-                "path":"age",
-                "label":"age",
-                "type": "integer"
-              },
-              {
-                "path":"isDeceased",
-                "label":"isDeceased",
-                "type": "boolean"
-              }
-            ]
-          },
-          {
-            "resource": "Observation",
-            "label": "OB",
-            "filters": [
-              {
-                "path": "code.coding.code",
-                "operator": "is",
-                "value": "20570-8",
-                "type": "string"
-              }
-            ],
-            "fields": [
-              {
-                "path":"value.Quantity.value",
-                "label": "hematocrit",
-                "type": "integer"
-              }
-            ]
-          }
-        ],
-        "options": {
-          "model": {
-            "class_name": "Sequential",
-            "config": {
-              "name": "sequential_1",
-              "layers": [
-                  "A default model will be used for this demo."
-              ]
-            }
-          },
-          "inputs": [
-            "gender",
-            "age",
-            "hematocrit"
-          ],
-          "outputs": [
-            "isDeceased"
-          ],
-          "optimizer": {
-            "name": "adam",
-            "parameters": {
-              "learning_rate": 0.00025,
-              "validation_split": 0.33,
-              "evaluation_split": 0.2,
-              "epochs": 1,
-              "batch_size": 2,
-              "shuffle": 1000
-            }
-          },
-          "compiler": {
-            "parameters": {
-              "loss": "binaryCrossentropy",
-              "metrics": [
-                "accuracy"
-              ]
-            }
-          }
+  "selectors": [
+    {
+      "resource": "Patient",
+      "label": "PA",
+      "limit": 1000,
+      "filters": [
+      ],
+      "fields": [
+        {
+          "path":"gender",
+          "label": "gender",
+          "type": "string"
+        },
+        {
+          "path":"age",
+          "label":"age",
+          "type": "integer"
+        },
+        {
+          "path":"isDeceased",
+          "label":"isDeceased",
+          "type": "boolean"
         }
-      }`,
+      ]
+    },
+    {
+      "resource": "Observation",
+      "label": "OB",
+      "filters": [
+        {
+          "path": "code.coding.code",
+          "operator": "is",
+          "value": "20570-8",
+          "type": "string"
+        }
+      ],
+      "fields": [
+        {
+          "path":"value.Quantity.value",
+          "label": "hematocrit",
+          "type": "integer"
+        }
+      ]
+    }
+  ],
+  "options": {
+    "model": {
+      "class_name": "Sequential",
+      "config": {
+        "name": "sequential_1",
+        "layers": [
+            "A default model will be used for this demo."
+        ]
+      }
+    },
+    "inputs": [
+      "gender",
+      "age",
+      "hematocrit"
+    ],
+    "outputs": [
+      "isDeceased"
+    ],
+    "optimizer": {
+      "name": "adam",
+      "parameters": {
+        "learning_rate": 0.00025,
+        "validation_split": 0.33,
+        "evaluation_split": 0.2,
+        "epochs": 1,
+        "batch_size": 2,
+        "shuffle": 1000
+      }
+    },
+    "compiler": {
+      "parameters": {
+        "loss": "binaryCrossentropy",
+        "metrics": [
+          "accuracy"
+        ]
+      }
+    }
+  }
+}`,
     };
   },
   computed: {

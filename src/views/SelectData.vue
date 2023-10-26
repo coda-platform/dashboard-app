@@ -1,16 +1,16 @@
 <template>
   <v-container v-bind:class="[{ slim: minimize }, 'mainContainer']">
+
     <BForm
       v-bind:class="{ inline: minimize }"
       @submit.prevent="onSubmit"
       @reset="onReset"
     >
       <div class="selectData">
-        <v-card class="selectContainer">
+        <v-card class="selectContainer" style="z-index: 9">
           <div class="panelTitle">
             <span>{{ $t("selectHospitalTxt") }}</span>
           </div>
-
           <div class="selectionPanel">
             <multiselect
               v-model="form.sites"
@@ -38,7 +38,7 @@
           </div>
         </v-card>
 
-        <v-card id="selectContinuousContainer" class="selectContainer">
+        <v-card id="selectContinuousContainer" class="selectContainer" style="z-index: 8">
           <div class="panelTitle">
             <span>{{ $t("selectMeasuresTxt") }}</span>
           </div>
@@ -66,7 +66,7 @@
                 <template v-slot:noResult>No measure found.</template>
               </multiselect>
             </div>
-            <div class="subPanel" v-if="measures.disc">
+            <div class="subPanel" v-if="measures.disc" style="margin-top: 16px;">
               <span>{{ $t("discTxt") }}</span>
               <multiselect
                 v-model="form.measures.disc"
@@ -92,7 +92,7 @@
           </div>
         </v-card>
 
-        <v-card class="selectContainer">
+        <v-card class="selectContainer" style="z-index: 7">
           <div class="panelTitle">
             <span>{{ $t("resourceTxt") }}</span>
           </div>
@@ -185,7 +185,7 @@
           </div>
         </v-card>
 
-        <v-card id="selectBreakdownContainer " class="selectContainer">
+        <v-card id="selectBreakdownContainer " class="selectContainer" style="z-index: 6">
           <div class="panelTitle">
             <span>{{ $t("selectBreakdownTxt") }}</span>
           </div>
@@ -288,9 +288,6 @@
       <div class="col-lg-6 col-md-4 submit-btn">
         <BButton
           type="submit"
-          pill
-          block
-          variant="success"
           :disabled="dataUpdate"
           v-if="!awaitSubmit"
           >{{ $t("runQueryTxt") }}</BButton
@@ -331,6 +328,7 @@
     <!--    </div>-->
   </v-container>
 </template>
+<style src="vue-multiselect/dist/vue-multiselect.css"></style>
 
 <script>
 import { bus } from "@/main";
@@ -894,32 +892,3 @@ export default {
   },
 };
 </script>
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-<style>
-.multiselect__clear {
-  position: absolute;
-  right: 41px;
-  height: 40px;
-  width: 40px;
-  display: block;
-  cursor: pointer;
-  z-index: 2;
-}
-.multiselect__clear::before {
-  transform: rotate(45deg);
-}
-.multiselect__clear::after {
-  transform: rotate(-45deg);
-}
-.multiselect__clear::after,
-.multiselect__clear::before {
-  content: "";
-  display: block;
-  position: absolute;
-  width: 3px;
-  height: 16px;
-  background: #aaa;
-  top: 12px;
-  right: 4px;
-}
-</style>
