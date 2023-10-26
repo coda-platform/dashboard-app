@@ -88,7 +88,6 @@ keycloak
             app.$log.info("Token refreshed" + refreshed);
             TokenContext.setToken(keycloak.token);
           } else {
-            app.$log.info("Token not");
             app.$log.warn('Token not refreshed, valid for ' +
               Math.round(keycloak.tokenParsed.exp +
                 keycloak.timeSkew - new Date().getTime() / 1000) +

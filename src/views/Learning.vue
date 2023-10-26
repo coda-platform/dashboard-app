@@ -151,6 +151,9 @@ export default {
   components: { LearningLineChart },
   name: "Learning",
   methods: {
+    getPrepareBody() {
+      return isProxy(this.prepareBody) ? toRaw(this.prepareBody) : this.prepareBody
+    },
     getSelectedSitesList() {
       const rawData = this.selectedSites
       const sites = isProxy(rawData) ? toRaw(rawData) : [...rawData]
@@ -162,7 +165,7 @@ export default {
       this.isPreparing = true;
 
       console.log(sitesUri);
-      LearningApi.getPrepare(this.prepareBody, sitesUri).then((res) => {
+      LearningApi.getPrepare(this.getPrepareBody(), sitesUri).then((res) => {
         if (res.status == 200) {
           this.jobID = res.data[0].job;
           this.trainBody = `{"job": "${this.jobID}","rounds": 10}`;
