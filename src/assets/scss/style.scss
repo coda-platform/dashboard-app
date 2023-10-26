@@ -447,7 +447,7 @@ body {
 }
 
 .prepareButton, .trainButton {
-  background-color: #19a68d; 
+  background-color: #19a68d !important; 
   color: white !important; 
   margin: 10px;
   border-width: 0;
@@ -461,7 +461,7 @@ body {
   border-radius: 4px;
   color: white !important; 
   &.toggled {
-    background-color: #19a68d; 
+    background-color: #19a68d  !important; 
   }
   font-size: 12px;
   position: absolute;
@@ -476,6 +476,7 @@ body {
 
 .queryButton {
   width: 100%;
+  color: white;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px
 }
 
