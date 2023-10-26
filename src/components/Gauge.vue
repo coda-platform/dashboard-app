@@ -12,6 +12,8 @@ import {
   LegendComponent,
 } from "echarts/components";
 import VChart from "vue-echarts";
+import { GaugeChart } from 'echarts/charts';
+use([GaugeChart]);
 
 use([CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent]);
 

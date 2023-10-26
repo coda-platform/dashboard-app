@@ -89,16 +89,15 @@ export default {
       ];
     },
     getTooltipFormatter() {
-      let ComponentClass = defineComponent(TooltipLineFormatter);
       return (series) => {
-        let instance = new ComponentClass({
+        let instance = defineComponent(TooltipLineFormatter, {
           propsData: {
             date: series[0].name,
             data: this.data,
             series: series,
           },
         });
-        instance.$mount();
+        instance.mount();
         return instance.$el;
       };
     },
