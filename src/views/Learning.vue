@@ -98,11 +98,11 @@
             <BFormCheckbox
               class="sites-checkbox"
               v-for="availableSite in availableSites"
-              :key="availableSite.uid"
-              :checked="isSelected(availableSite.uid)"
+              :key="availableSite.value"
+              :checked="isSelected(availableSite.value)"
               @change="toggleSiteSelection(availableSite)"
             >
-              <strong>{{ availableSite.uid }} - {{ availableSite.name }}</strong>
+              <strong>{{ availableSite.value }} - {{ availableSite.name }}</strong>
             </BFormCheckbox>
 
           </BCardBody>
