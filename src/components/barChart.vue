@@ -42,7 +42,7 @@ export default {
   created() {
     window.addEventListener("resize", ()=>{
       const barChart = this.$refs.barChart;
-      if (barChart && barChart.hasOwnProperty('resize'))  barChart.resize();
+      if (barChart && Object.hasOwnProperty.bind(barChart)('resize'))  barChart.resize();
     });
   },
   computed:{
@@ -88,7 +88,7 @@ export default {
           feature:{
             saveAsImage:{
               show:true,
-              title:this.$t("saveImgTxt")
+              title: "saveImgTxt"
             },
             // magicType:{show: true, type: ['stack']}
           }
@@ -141,7 +141,7 @@ export default {
 
 
       if(this.title){
-        option.title.text = this.$t(this.title);
+        option.title.text = this.title
         option.title.show = true;
       }
 
@@ -158,7 +158,7 @@ export default {
           seriesOpt.push({
             type: 'bar',
             data: this.stack ? this.data[idx] : this.data.map(a=>{return a[idx]}),
-            name: this.$t(serie) ,
+            name: serie ,
             stack: this.stack ? this.stack : '',
             itemStyle: {
               color: () => {
@@ -202,7 +202,7 @@ export default {
           seriesOpt = this.data.map(function (data, index) {
             return {
               type: 'bar',
-              name:_this.$t(_this.group[index]),
+              name: _this.group[index],
               animation: false,
               itemStyle: {
                 opacity: 0.8
@@ -229,7 +229,7 @@ export default {
       if(this.group){
         var group = [];
         for (let i = 0; i <this.group.length; i++) {
-	        group[i] = this.$t(this.group[i]);
+	        group[i] = this.group[i];
         }
         if(this.margin)
           selectedMode = false

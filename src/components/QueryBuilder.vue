@@ -11,8 +11,6 @@ import { bus } from "@/main"
 import '@/plugins/lang/query-builder.fr.js'
 import '@/plugins/lang/query-builder.en.js'
 import {
-  ResourceTypes,
-  FiltersByDataType,
   AttributesByResourceType,
 } from "../../fhir-types";
 
@@ -131,7 +129,7 @@ export default {
       const result = $(_this.$refs.queryBuilder).queryBuilder('getRules');
 
       if (!$.isEmptyObject(result)) {
-        bus.$emit('queryUpdate', result)
+        bus.emit('queryUpdate', result)
       }
 
     })
@@ -182,7 +180,7 @@ export default {
       $b.on('rulesChanged.queryBuilder', function(){
         const result = $(_this.$refs.queryBuilder).queryBuilder('getRules');
         if (!$.isEmptyObject(result)) {
-          bus.$emit('queryUpdate', result)
+          bus.emit('queryUpdate', result)
         }
       })
 

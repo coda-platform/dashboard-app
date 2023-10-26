@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { dataTool, use } from "echarts/core";
+import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import {LineChart} from "echarts/charts";
 import {
@@ -13,9 +13,6 @@ import {
   ToolboxComponent
 } from "echarts/components";
 import VChart from "vue-echarts";
-import { zip } from "underscore";
-
-import TooltipLineFormatter from "./TooltipLineFormatter.vue";
 
 use([
   CanvasRenderer,
@@ -25,8 +22,6 @@ use([
   ToolboxComponent,
   LineChart
 ]);
-
-import Vue from "vue";
 
 export default {
   name: "MultiLineChart",
@@ -104,7 +99,7 @@ export default {
     },
   },
   mounted() { window.addEventListener("resize", this.onResize); },
-  beforeDestroy() { window.removeEventListener('resize', this.onResize); },
+  beforeUnmount() { window.removeEventListener('resize', this.onResize); },
   computed:{
     option() {
       return {

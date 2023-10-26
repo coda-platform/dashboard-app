@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import {defineComponent} from 'vue'
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
 import {LineChart} from "echarts/charts";
@@ -25,8 +26,6 @@ use([
   ToolboxComponent,
   LineChart
 ]);
-
-import Vue from "vue";
 
 const hasCI = (dataSeries) => ["ll", "ul"].every(el => Object.keys(dataSeries).includes(el));
 
@@ -79,7 +78,7 @@ export default {
       }, ...this.toCIStyle(data)];
     },
     getTooltipFormatter() {
-      let ComponentClass = Vue.extend(TooltipLineFormatter);
+      let ComponentClass = defineComponent(TooltipLineFormatter);
       return (series) => {
         let instance = new ComponentClass({
           propsData: {
@@ -94,7 +93,7 @@ export default {
     }
   },
   mounted() { window.addEventListener("resize", this.onResize); },
-  beforeDestroy() { window.removeEventListener('resize', this.onResize); },
+  beforeUnmount() { window.removeEventListener('resize', this.onResize); },
   computed:{
     option() {
       return {

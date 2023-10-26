@@ -1,6 +1,6 @@
-{
-   "langCode":"fr",
-
+const fr = {
+  "langCode": "fr",
+  "loading": "Chargement...",
   "home_new_patient": "Nombre de tests effectués",
   "home_new_case": "Nouveaux cas ce jour",
   "home_daily_death": "Nouveaux décès ce jour",
@@ -50,7 +50,7 @@
   "addNewMeasure": "+ Nouvelles mesures",
 
   "resourceTxt": "Resources",
-  "selectFieldTxt" : "Sélectionnez les domaines",
+  "selectFieldTxt": "Sélectionnez les domaines",
   "resources_add": "Ajouter (+)",
 
   "disable_breakdown": "Désactivé la stratification",
@@ -73,7 +73,7 @@
 
   "contTxt": "Continues",
   "discTxt": "Discrètes",
-  "selectContTxt":"Sélectionnez les mesures continues",
+  "selectContTxt": "Sélectionnez les mesures continues",
   "selectDiscTxt": "Sélectionnez des mesures discrètes",
 
   "resultsTxt": "Résultats",
@@ -91,11 +91,11 @@
   "male": "homme ",
   "female": "femme ",
 
-   "site": "site ",
-   "mean": "moyenne ",
-   "stdev": "stdev ",
-   "ci95": "ci95 ",
-   "count": "Nombre ",
+  "site": "site ",
+  "mean": "moyenne ",
+  "stdev": "stdev ",
+  "ci95": "ci95 ",
+  "count": "Nombre ",
 
   "newSearchTxt": "Nouvelle recherche",
   "summaryTxt": "Résumé",
@@ -146,5 +146,6 @@
   "sendPrepareTxt": "Envoyer requête de préparation",
   "sendTrainTxt": "Envoyer requête d'entrainement",
   "evaluateResultTxt": "Résultats d'évaluation",
-  "countResultTxt":"compte Résultats"
+  "countResultTxt": "compte Résultats"
 }
+export default fr

@@ -1,4 +1,5 @@
-import VueRouter from 'vue-router'
+// Composables
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/Home'
 import Stats from '@/views/Stats'
 import AppHeader from '@/components/AppHeader'
@@ -20,7 +21,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19"
+            title: "CODA platform"
         }
     },
     {
@@ -32,7 +33,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - Stats"
+            title: "CODA - Stats"
         }
     },
     {
@@ -44,7 +45,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - HomeMetrics"
+            title: "CODA - HomeMetrics"
         }
     },
     {
@@ -56,7 +57,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - Learning"
+            title: "CODA - Learning"
         }
     },
     {
@@ -68,7 +69,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - UI Dashboard - (Connected data selection)"
+            title: "CODA - UI Dashboard - (Connected data selection)"
         }
     },
     {
@@ -80,7 +81,7 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - Forest"
+            title: "CODA - Forest"
         }
     },
     {
@@ -92,15 +93,16 @@ const routes = [
             footer: Footer
         },
         meta: {
-            title: "CODA 19 - Connections"
+            title: "CODA - Connections"
         }
     }
 ]
 
 
-const router = new VueRouter({
-    routes,
+const router = createRouter({
+    history: createWebHistory(process.env.BASE_URL),
     linkExactActiveClass: "active",
+    routes,
 })
 
 export default router

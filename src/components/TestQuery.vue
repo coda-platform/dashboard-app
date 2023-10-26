@@ -45,7 +45,7 @@ export default {
       const headers = TokenBearerHeaderFactory.get();
       this.startTime = performance.now();
       axios.create({
-        baseURL: process.env.VUE_APP_CODA_DASHBOARD_API_URL,
+        baseURL: process.env.CODA_DASHBOARD_API_URL,
         timeout: 30000,
       }).get(this.query.endpoint, { headers: headers })
        .then(res => this.onSuccess(res))
@@ -65,7 +65,7 @@ export default {
       this.timeMs = performance.now() - this.startTime;
       this.status = cmptStatus;
       this.httpCode = httpStatus;
-      this.$emit('queryComplete', this.timeMs);
+      bus.emit('queryComplete', this.timeMs);
     }
   },
   watch: {

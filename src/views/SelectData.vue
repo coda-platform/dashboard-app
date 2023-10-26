@@ -3,7 +3,7 @@
 <!--        <h1>{{ $t("titleTxt") }}</h1>-->
 
 
-      <b-form  v-bind:class="{'inline': minimize}" @submit.prevent="onSubmit" @reset="onReset">
+      <BForm  v-bind:class="{'inline': minimize}" @submit.prevent="onSubmit" @reset="onReset">
 
           <div class="selectData">
             <v-card class="selectContainer">
@@ -86,9 +86,9 @@
 
               <div class="selectionPanel">
 
-                <b-card no-body>
-                  <b-tabs v-model="tabIndex" card>
-                    <b-tab v-for="resource in form.qB" :key="'dyn-tab-' + resource.label" active>
+                <BCard no-body>
+                  <BTabs v-model="tabIndex" card>
+                    <BTab v-for="resource in form.qB" :key="'dyn-tab-' + resource.label" active>
                       <template #title>
                         {{resource.name}}
                         <a class="closeBtn" @click="removeTab(resource)"><i class="fas fa-times"></i></a>
@@ -117,17 +117,17 @@
 
                         </multiselect>
                       </div>
-                    </b-tab>
+                    </BTab>
 
                     <!-- New Tab Button (Using tabs-end slot) -->
                     <template #tabs-end>
-                      <b-nav-item role="presentation" href="#" v-b-modal.modal-1><strong>{{$t("resources_add")}}</strong></b-nav-item>
-                      <b-modal id="modal-1" ref="new-tab-modal" title="New Resource" hide-footer>
+                      <BNavItem role="presentation" href="#" v-b-modal.modal-1><strong>{{$t("resources_add")}}</strong></BNavItem>
+                      <BModal id="modal-1" ref="new-tab-modal" title="New Resource" hide-footer>
                         <div>
-                          <b-form-select v-model="newResource" :options="resourceTabOptions"></b-form-select>
+                          <BFormSelect v-model="newResource" :options="resourceTabOptions"></BFormSelect>
                         </div>
-                        <b-button class="mt-3" id="newTab" block @click="newTab">Add</b-button>
-                      </b-modal>
+                        <BButton class="mt-3" id="newTab" block @click="newTab">Add</BButton>
+                      </BModal>
                     </template>
 
                     <!-- Render this if no tabs -->
@@ -137,8 +137,8 @@
                         Open a new tab using the <b>Add (+)</b> button above.
                       </div>
                     </template>
-                  </b-tabs>
-                </b-card>
+                  </BTabs>
+                </BCard>
               </div>
             </v-card>
 
@@ -158,8 +158,8 @@
                   <div class="col-lg-4 col-md-4">
                     <div>{{ $t("selectResourceTypeTxt") }}</div>
                     <div>
-                      <b-form-select class="form-control"  id="resourceType_breakdown" v-model="form.breakdown.resourceType" :disabled="!breakdown" :options="resourceTabOptions">
-                      </b-form-select>
+                      <BFormSelect class="form-control"  id="resourceType_breakdown" v-model="form.breakdown.resourceType" :disabled="!breakdown" :options="resourceTabOptions">
+                      </BFormSelect>
                       <!-- <select class="form-control"  id="resourceType_breakdown" v-model="form.breakdown.resourceType" :disabled="!breakdown">
                         <option >{{ $t("selectResourcePatient") }}</option>
                       </select> -->
@@ -168,7 +168,7 @@
                   <div class="col-lg-6 col-md-6" v-if="this.form.breakdown.resourceType">
                     <div>{{ $t("selectResourceAttributeTxt") }}</div>
                     <div>
-                      <b-form-select 
+                      <BFormSelect 
                         class="form-control" 
                         id="resourceAttribute_breakdown"  
                         v-model="form.breakdown.resourceAttribute" 
@@ -176,7 +176,7 @@
                         text-field="path"
                         value-field="path"
                         :options="resourceAttributeBreakdownOptions(form.breakdown.resourceType)">
-                      </b-form-select>
+                      </BFormSelect>
                       <!-- <select class="form-control" id="resourceAttribute_breakdown"  v-model="form.breakdown.resourceAttribute" :disabled="!breakdown">
                         <option >{{ $t("selectResourceAttributeAge")}}</option>
                         <option >{{ $t("selectResourceAttributeSex")}}</option>
@@ -205,18 +205,18 @@
 
 
         <div class="col-lg-6 col-md-4 submit-btn">
-          <b-button type="submit" pill block variant="success" :disabled="dataUpdate" v-if="!awaitSubmit">{{$t("runQueryTxt")}}</b-button>
-          <b-button pill block variant="success" disabled v-if="awaitSubmit">
-            <b-spinner small type="grow"></b-spinner>
+          <BButton type="submit" pill block variant="success" :disabled="dataUpdate" v-if="!awaitSubmit">{{$t("runQueryTxt")}}</BButton>
+          <BButton pill block variant="success" disabled v-if="awaitSubmit">
+            <BSpinner small type="grow"></BSpinner>
             Loading...
-          </b-button>
+          </BButton>
         </div>
-      </b-form>
+      </BForm>
     
     <div class="error-alert">
-      <b-alert v-model="isError" variant="danger" dismissible>
+      <BAlert v-model="isError" variant="danger" dismissible>
             {{ errorMsg }}
-          </b-alert>
+          </BAlert>
     </div>
 
 <!--    <div class="col-lg-5 col-md-5 ">-->
@@ -246,7 +246,6 @@
 </template>
 
 <script>
-import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import { bus } from "@/main";
 import _ from "underscore";
@@ -266,20 +265,20 @@ export default {
   name: "AppHeader",
   props: [ 'connections', 'resources', 'minimize', 'measures'],
   mounted(){
-    bus.$on('queryUpdate',(query)=>{this.getQuery(query)})
+    bus.on('queryUpdate',(query)=>{this.getQuery(query)})
   },
   computed: {
     options() {
       return [
-        { value: "length_of_stay", text: this.$t("length_of_stay") },
+        { value: "length_of_stay", text: "Length of stay" },
         { value: "icu", text: "ICU" },
         { value: { C: "CIUSS" }, text: "Group", disabled: true },
-        { value: "age_groups", text: this.$t("age_groups") },
+        { value: "age_groups", text: "Age groups" },
       ];
     },
     connectionOptions(){
       var sites = this.connections.map(conn => ({ 'text': conn.name, 'value': conn.uid }));
-      var group = this.$t("selectAllTxt");
+      var group = "Select all"
       var connOptions = [{sites:sites, group:group}]
       return connOptions
     },
@@ -375,22 +374,9 @@ export default {
       awaitSubmit:false,
       isError:false,
       errorMsg:"",
-      measures:{
-          cont:[
-            { code: 'count', labels: { 'en': 'count', 'fr': 'décompte'} },
-            { code: 'mean', labels: { 'en': 'mean', 'fr': 'moyenne'} },
-            { code: 'stdev', labels: { 'en': 'stdev', 'fr': 'stdev'} },
-            { code: 'ci95', labels: { 'en': 'ci95', 'fr': 'ci95'} }
-          ],
-          disc:[
-            { code: 'count', labels: { 'en': 'count', 'fr': 'décompte'} },
-            { code: 'mode', labels: { 'en': 'mode', 'fr': 'mode'} }
-          ]
-        },
     };
   },
   components: {
-    VueSlider,
     Multiselect,
     QueryBuilder
   },
@@ -465,7 +451,7 @@ export default {
         const dat = await this.getNSummaryData();
         console.info("res_data", dat);
 
-        bus.$emit("showResults", results);
+        bus.emit("showResults", results);
       }
       catch(err){
         this.isError = true
@@ -487,7 +473,7 @@ export default {
     clearAllFields (){
       this.form.field = []
     },
-    measuresSelected (category, key){
+    measuresSelected (category){
       if(category==='cont'){
         return this.form.measures.cont.length > 0
       }
@@ -640,7 +626,7 @@ export default {
         else if(d.about.fieldType=="integer"){
           figure.type = 'stackBar';
           var figureData = d.data.filter(dat=> dat[d.cols.findIndex(col=>col.code==='site')] != "all") //filter out 'all' site
-          var primaryCategory = d.cols[d.cols.findIndex(col=>col.code==='count')].categories.map(c=>c.code),//get x axis
+              primaryCategory = d.cols[d.cols.findIndex(col=>col.code==='count')].categories.map(c=>c.code),//get x axis
               subCategory = figureData.map(dat=> dat[d.cols.findIndex(col=>col.code==='site')]); //get sites
           figure.category= [primaryCategory, subCategory]
           figure.data = figureData.map(dat=> dat[d.cols.findIndex(col=>col.code==='count')]); //get data from each site
@@ -719,10 +705,10 @@ export default {
   watch: {
     connections() {
       var sites = this.connections.map(conn => ({ 'text': conn.name, 'value': conn.uid }));
-      var group = this.$t("selectAllTxt");
+      var group = "Select all"
       this.connOptions.push({sites:sites, group:group})
     },
-    conns(newVal, oldVal) {
+    conns(newVal) {
       if (newVal.length === 0) {
         this.indeterminate = false;
         this.allSelected = false;

@@ -7,7 +7,6 @@
 
 <script>
 import * as d3 from 'd3'
-import $ from "jquery"
 
 export default {
   name: "d3_plot",
@@ -68,7 +67,7 @@ export default {
 
       rows
           .append('text')
-          .text(function(d,i) {  return that.$t(that.data.categories[i]); })
+          .text(function(d,i) {  return that.data.categories[i]; })
           .style('font-size', config.fontSize)
           .style('font-family', config.fontFamily)
           .attr('dy', (layout.rowHeight - config.fontSize) / 2 + 10)

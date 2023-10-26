@@ -64,7 +64,7 @@ export default {
   created() {
     window.addEventListener("resize", ()=> {
       const chart = this.$refs.lineChart.resize();
-      if (chart && chart.hasOwnProperty('resize'))  chart.resize();
+      if (chart && Object.hasOwnProperty.bind(chart)('resize'))  chart.resize();
     } );
   },
   computed:{

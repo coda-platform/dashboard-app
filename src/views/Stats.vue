@@ -42,14 +42,11 @@ const getSiteKeys = (resources) => resources.reduce((acc, el) => { acc[`${el.typ
 export default {
   components: {
     Results,
-    Connections,
-    Dashboard,
     SelectData,
-    Forest,
   },
   props: { },
   async created() {
-    bus.$on("showDashboard", (data) => {
+    bus.on("showDashboard", (data) => {
       this.summary = data.summary;
       this.sites = data.summary.sites;
       //this.length_of_stay = data.length_of_stay;
@@ -62,14 +59,14 @@ export default {
       this.showDash = true;
     });
 
-    bus.$on("showResults", (data) => {
+    bus.on("showResults", (data) => {
       this.tables = data.tables;
       this.figures = data.figures;
 
       this.showResults = true;
     });
 
-    // bus.$on("newSearch", () => {
+    // bus.on("newSearch", () => {
     //   this.component = "SelectData";
     //
     //   fetch('http://localhost:3000/sites') // Do not use this fetch pattern, use apis instead.

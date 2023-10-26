@@ -37,7 +37,7 @@ export default {
           position: 'top',
           formatter: (params) => {
             if(params.value.length === 1)
-              return this.$t('meanTxt')+': '+params.value[0] ;
+              return 'Mean: '+params.value[0] ;
             else return params.value[1]+': '+params.value[0]
           }
         },
@@ -57,7 +57,7 @@ export default {
           feature:{
             saveAsImage:{
               show:true,
-              title:this.$t("saveImgTxt")
+              title: "Save image"
             }
           }
         },
@@ -66,7 +66,7 @@ export default {
         option.title.push({
           textBase: 'middle',
           top: (idx*80/6+12)+'%',//(idx + 0.6) * 100 / 6 + '%',
-          text: this.$t(cat),
+          text: cat,
           left: 130,
           textStyle:{
             fontSize: 14

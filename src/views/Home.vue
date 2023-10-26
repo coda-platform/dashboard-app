@@ -3,8 +3,8 @@
     <v-container>
       <!-- Line 1 (1, 2, 3) -->
       <div class="row">
-        <div v-for="(tile,i) in numberTiles" class="col-lg-4 col-md-4">
-          <HomeTextTile :txTitle= "$t(titleKeys[i])"
+        <div v-for="(tile,i) in numberTiles" class="col-lg-4 col-md-4" v-bind:key="tile">
+          <HomeTextTile :txTitle="$t(titleKeys[i])"
                         :nSites="5"
                         :txBottom="i==='1' ? $t('home_positivity',{positivity: tile.rate}) : $t('home_average',{average: tile.average})  + $t('home_rt',{rate: tile.rt})"
                         :data="tile.total"></HomeTextTile>
@@ -13,7 +13,7 @@
 
       <!-- Line 2 (4, 5, 6) -->
       <div class="row">
-        <div v-for="(line,i) in lines" class="col-lg-4 col-md-6 col-sm-12 cardContainer">
+        <div v-for="(line,i) in lines" class="col-lg-4 col-md-6 col-sm-12 cardContainer" v-bind:key="line">
           <div class="title"><span>{{ $t(titleKeys[i]) }}</span></div>
           <v-card>
             <PanelOverlay :dataReady="isReady(line.data)" :dataError="line.dataError" />
@@ -25,32 +25,32 @@
 
       <!-- Line 3 (7, 8, 9 -->
       <div class="row">
-        <div v-for="(bar,i) in barcharts0" class="col-lg-4 col-md-12 col-sm-12 cardContainer">
-          <div class="title" :style="{opacity: getTOpacity(i)}"><span>{{ $t(titleKeys[i]) }}</span></div>
+        <div v-for="(bar,i) in barcharts0" class="col-lg-4 col-md-12 col-sm-12 cardContainer" v-bind:key="bar">
+          <div class="title"><span>{{ $t(titleKeys[i]) }}</span></div>
           <v-card>
             <PanelOverlay :dataReady="isReady(bar.data)" :dataError="bar.dataError" />
 
-            <BarChart :style="{width: '100%', opacity: getTOpacity(i)}" :colors="colors" :horizontal="true" :data="bar.data" :category="bar.sites" autoresize></BarChart>
+            <BarChart :style="{width: '100%'}" :colors="colors" :horizontal="true" :data="bar.data" :category="bar.sites" autoresize></BarChart>
           </v-card>
         </div>
         <div class="col-lg-4 col-md-12 col-sm-12 cardContainer">
-          <div class="title" style="opacity: 0.5;"><span>{{ $t("home_total_occupation") }}</span></div>
+          <div class="title"><span>{{ $t("home_total_occupation") }}</span></div>
           <v-card>
-            <PanelOverlay :dataReady="isReady(gauge.rate)" :dataError="gauge.dataError" style="opacity: 0.5;"  />
+            <PanelOverlay :dataReady="isReady(gauge.rate)" :dataError="gauge.dataError"  />
 
-            <Gauge style="width: 100%; opacity: 0.5;" :value="gauge.rate"></Gauge>
+            <Gauge style="width: 100%;" :value="gauge.rate"></Gauge>
           </v-card>
         </div>
       </div>
 
       <!-- Line 4 (10, 11, 12) -->
       <div class="row">
-        <div v-for="(bar,i) in barcharts1" class="col-lg-4 col-md-12 col-sm-12 cardContainer">
-          <div class="title" style="opacity: 0.5;"><span>{{ $t(titleKeys[i]) }}</span></div>
+        <div v-for="(bar,i) in barcharts1" class="col-lg-4 col-md-12 col-sm-12 cardContainer" v-bind:key="bar">
+          <div class="title"><span>{{ $t(titleKeys[i]) }}</span></div>
           <v-card>
             <PanelOverlay :dataReady="isReady(bar.data)" :dataError="bar.dataError" />
 
-            <BarChart style="width:100%; opacity: 0.5;" :colors="colors" :data="bar.data" :category="bar.sites" :group="bar.group" autoresize></BarChart>
+            <BarChart style="width:100%;" :colors="colors" :data="bar.data" :category="bar.sites" :group="bar.group" autoresize></BarChart>
           </v-card>
         </div>
       </div>
@@ -63,10 +63,8 @@ import {_} from "vue-underscore";
 import BarChart from "@/components/barChart";
 import HomeTextTile from "@/components/HomeTextTile";
 import Const from "@/const";
-import Legend from "@/components/legend";
 import GeneralApi from "@/api/GeneralApi";
 import Gauge from "@/components/Gauge";
-import LineChart from "../components/lineChart";
 import PanelOverlay from "../components/PanelOverlay";
 import { DateTime } from "luxon";
 import MultiLineChart from "../components/MultiLineChart";
@@ -106,8 +104,8 @@ function formatForCharts(obj) {
 }
 
 export default {
-  name: "Home",
-  components: {PanelOverlay, LineChart, BarChart, Legend, Gauge, HomeTextTile, MultiLineChart},
+  name: "DashboardHome",
+  components: {PanelOverlay, BarChart, Gauge, HomeTextTile, MultiLineChart},
   methods: {
     getPanelData: function(i, mode) {
       // Moved from await to promise, because await is making all queries sequential.

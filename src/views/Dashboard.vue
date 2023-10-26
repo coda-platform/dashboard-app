@@ -1,7 +1,7 @@
 <template>
   <div class="mainContainer">
 <!--    <v-row id="backBtn">-->
-<!--      <a @click="newSearch"><b-button variant="outline-dark"><b-icon icon="arrow-left-circle" aria-hidden="true"></b-icon>   {{$t('newSearchTxt')}}</b-button></a>-->
+<!--      <a @click="newSearch"><BButton variant="outline-dark"><BIcon icon="arrow-left-circle" aria-hidden="true"></BIcon>   {{$t('newSearchTxt')}}</BButton></a>-->
 <!--    </v-row>-->
   <v-container >
     <v-row>
@@ -16,7 +16,7 @@
       <div class="col-lg-6 col-md-12 col-sm-12">
         <v-row style="flex-direction: column">
           <h3>{{$t('legendTxt')}}</h3>
-          <Legend :colors="legendColors" :sites="legendSites" :highlight.sync="highlight" :direction="'vertical'"></Legend>
+          <Legend :colors="legendColors" :sites="legendSites" v-model:highlight="highlight" :direction="'vertical'"></Legend>
         </v-row>
       </div>
     </v-row>
@@ -48,13 +48,12 @@
 import PlotChart from "@/components/plotChart";
 import ScatterChart from "@/components/scatterChart";
 import BarChart from "@/components/barChart";
-import Legend from "@/components/legend";
 import { bus } from "@/main";
 import Const from "@/const";
 
 export default {
-  name: "Dashboard",
-  components: {PlotChart, ScatterChart, BarChart, Legend},
+  name: "DashboardHome",
+  components: {PlotChart, ScatterChart, BarChart},
   props:{
     summary: {
       type: Object
@@ -83,7 +82,7 @@ export default {
   },
   methods:{
     newSearch() {
-      bus.$emit('newSearch')
+      bus.emit('newSearch')
     }
   },
   data(){

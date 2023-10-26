@@ -44,13 +44,13 @@ export default {
           inverse: true
         },
         title: {
-          text: this.$t('length_of_stay'),
+          text: "Length of stay",
           left: 'center',
           bottom: '5'
         },
         tooltip:{
           formatter: (params) => {
-            var site = params.value[1] === "Mean" ? this.$t('meanTxt') : params.value[1];
+            var site = params.value[1] === "Mean" ? "Mean" : params.value[1];
             return site+': '+params.value[0]
           }
         },
@@ -59,7 +59,7 @@ export default {
           feature:{
             saveAsImage:{
               show:true,
-              title:this.$t("saveImgTxt")
+              title: "Save as image"
             }
           }
         },
@@ -68,14 +68,14 @@ export default {
       this.data.forEach((siteData,i)=>{
         var data = [], rangeData = [];
         // data[0] = siteData[0][0]
-        // data[1] = siteData[0][2] === "Mean" ? this.$t('meanTxt') : siteData[0][2];
+        // data[1] = siteData[0][2] === "Mean" ? "Mean" : siteData[0][2];
         data = siteData,
 
         // rangeData[0] = siteData[0][1]
-        // rangeData[1] = siteData[0][2] === "Mean" ? this.$t('meanTxt') : siteData[0][1];
+        // rangeData[1] = siteData[0][2] === "Mean" ? "Mean" : siteData[0][1];
 
         option.series.push({
-          name: siteData[1] === "Mean" ? this.$t('meanTxt') : siteData[1],
+          name: siteData[1] === "Mean" ? "Mean" : siteData[1],
           data: [data],
           itemStyle:{color:siteData[1]==="Mean"?"black":this.colors[i]},
           type: 'scatter',
@@ -102,7 +102,7 @@ export default {
             //   }
             // ],
             // option.series.push({
-            //   name: siteData[0][2] === "Mean" ? this.$t('meanTxt') : siteData[0][2],
+            //   name: siteData[0][2] === "Mean" ? "Mean" : siteData[0][2],
             //   data: rangeData,
             //   lineStyle:{color:siteData[0][2]==="Mean"?"black":this.colors[i]},
             //   type:'line',

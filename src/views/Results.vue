@@ -5,9 +5,9 @@
           <span>{{ $t("resultsTxt") }}</span>
         </div>
         <div class="resultPanel">
-          <div class="subPanel" v-for="(table,idx) in tables">
+          <div class="subPanel" v-for="(table,idx) in tables" v-bind:key="idx">
             <div class="tableTitle"><span class="tableIdx">{{$t('tableTxt')+(idx+1)+"."}}</span><span>{{$t(table.nameKey)}}</span></div>
-            <b-table
+            <BTable
                 :striped="false"
                 :bordered="false"
                 :borderless="true"
@@ -23,10 +23,10 @@
                 :head-variant="null"
                 :table-variant="'light'"
                 :responsive="true"
-            ></b-table>
+            ></BTable>
           </div>
           <v-divider></v-divider>
-          <div class="subPanel" v-for="(figure, idx) in figures">
+          <div class="subPanel" v-for="(figure, idx) in figures" v-bind:key="idx">
             <div class="tableTitle"><span class="tableIdx">{{$t('figureTxt')+(idx+1)+"."}}</span><span>{{$t(figure.nameKey)}}</span></div>
             <rangeBarchart v-if="figure.type === 'range'" :id="'svg-'+idx" style="height: 40vh" :colors="colors" :breakdown="figure.breakdown" :category="figure.category" :data="figure.data" :group="true" :labels="siteLabels" autoresize></rangeBarchart>
             <BarChart v-if="figure.type === 'bar'" :id="'svg-'+idx" style="width:100%"  :category="figure.category[0]" :colors="colors"  :data="figure.data" :group="figure.category[1]" :labels="siteLabels" :margin="figure.margin"></BarChart>
@@ -43,8 +43,8 @@
 
 <script>
 import BarChart from "@/components/barChart";
-import { bus } from "@/main";
 import Const from "@/const";
+import { bus } from "@/main";
 import rangeBarchart from "@/components/rangeBarchart"
 import LineChart from "@/components/lineChart"
 
@@ -86,7 +86,7 @@ export default {
        return newObjArray ;
     },
     newSearch() {
-      bus.$emit('newSearch')
+      bus.emit('newSearch')
     }
   },
   data(){

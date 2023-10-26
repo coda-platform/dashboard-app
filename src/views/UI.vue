@@ -4,27 +4,27 @@
   <div class="row">
     <div class="col-lg-7 col-md-7">
     <div class="selectData">
-          <b-form class="mx-5 my-3" @submit.prevent="onSubmit" @reset="onReset" >
-            <b-form-group id="input-group-selectData"  >
-              <b-form-input
+          <BForm class="mx-5 my-3" @submit.prevent="onSubmit" @reset="onReset" >
+            <BFormGroup id="input-group-selectData"  >
+              <BFormInput
                   id="input-selectData1"
                   v-model="form.query"
 
                   placeholder="Query"
-              ></b-form-input>
-            </b-form-group>
-             <b-form-group id="input-group-selectData3">
+              ></BFormInput>
+            </BFormGroup>
+             <BFormGroup id="input-group-selectData3">
                    <p>{{$t('selectVariableTxt')}}</p>
-                  <b-form-select v-model="form.variables" :options="options"  multiple :select-size="4" ></b-form-select>
-            </b-form-group>
-            <b-form-group id="input-group-selectData4">
+                  <BFormSelect v-model="form.variables" :options="options"  multiple :select-size="4" ></BFormSelect>
+            </BFormGroup>
+            <BFormGroup id="input-group-selectData4">
               <p>{{$t('selectDaysTxt')}} </p>
               <vue-slider v-model="value" :enable-cross="false"></vue-slider>
-            </b-form-group>
-            <b-form-group>
+            </BFormGroup>
+            <BFormGroup>
 
               <b>{{$t('selectHospitalTxt')}}</b><br>
-              <b-form-checkbox
+              <BFormCheckbox
                   v-model="allSelected"
                   :indeterminate="indeterminate"
                   aria-describedby="sitesOptions"
@@ -32,18 +32,18 @@
                   @change="toggleAll"
               >
                 {{ allSelected ? $t('unselectAllTxt') : $t('selectAllTxt') }}
-              </b-form-checkbox>
+              </BFormCheckbox>
 
-              <b-form-checkbox-group
+              <BFormCheckboxGroup
                   id="site_checkbox_group"
                   v-model="sites"
                   :options="sitesOptions"
                   name="site"
                   stacked
-              ></b-form-checkbox-group>
-            </b-form-group>
-            <b-button type="submit" pill block variant="success">{{$t('selectTxt')}}</b-button>
-          </b-form>
+              ></BFormCheckboxGroup>
+            </BFormGroup>
+            <BButton type="submit" pill block variant="success">{{$t('selectTxt')}}</BButton>
+          </BForm>
         </div>
 
       </div>
@@ -51,7 +51,7 @@
             <div class="connectedPanel">
            <h3>{{$t('siteTitleTxt')}}</h3>
            <hr/>
-           <ul v-for="place in places">
+           <ul v-for="place in places" v-bind:key="place">
                 <li class="ok">{{place}}</li>
            </ul>
             </div>
@@ -73,10 +73,10 @@ export default {
   computed: {
     options() {
       return [
-        { value: 'length_of_stay', text: this.$t('length_of_stay') },
+        { value: 'length_of_stay', text:  "Length of stay" },
         { value: 'icu', text: 'ICU'   },
         { value: { C: 'CIUSS' }, text: 'Group' , disabled: true },
-        { value: 'age_groups', text: this.$t('age_groups')}
+        { value: 'age_groups', text: "Age groups" }
       ]
     }
   },
@@ -130,7 +130,7 @@ export default {
           .then(data => {
             console.info('res_data', data);
 
-            bus.$emit('showDashboard', data);
+            bus.emit('showDashboard', data);
           })
 
     },
@@ -142,7 +142,7 @@ export default {
     }
   },
   watch: {
-    sites(newVal, oldVal) {
+    sites(newVal) {
       if (newVal.length === 0) {
         this.indeterminate = false
         this.allSelected = false

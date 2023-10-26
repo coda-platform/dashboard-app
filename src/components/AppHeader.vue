@@ -1,43 +1,43 @@
 <template>
-  <b-navbar id="nav" toggleable="lg" variant="faded" type="light">
-    <b-navbar-brand href="/">
+  <BNavbar id="nav" toggleable="lg" variant="faded" type="light">
+    <BNavbarBrand href="/">
       <img alt="Vue logo" src="../assets/logo.png" width="30" height="30" class="d-inline-block align-top">
       CODA
-    </b-navbar-brand>
+    </BNavbarBrand>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <BNavbarToggle target="nav-collapse"></BNavbarToggle>
 
-    <b-collapse id="nav-collapse" class="mr-lg-5" is-nav>
-      <b-navbar-nav>
-        <b-nav-item>
+    <BCollapse id="nav-collapse" class="mr-lg-5" is-nav>
+      <BNavbarNav>
+        <BNavItem>
           <router-link to="/" class="nav-link">{{ $t('homeTxt') }}</router-link>
-        </b-nav-item>
-        <b-nav-item>
+        </BNavItem>
+        <BNavItem>
           <router-link to="/stats" class="nav-link">{{ $t('statsTxt') }}</router-link>
-        </b-nav-item>
-        <b-nav-item>
+        </BNavItem>
+        <BNavItem>
           <router-link to="/learning" class="nav-link">{{ $t('learningTxt') }}</router-link>
-        </b-nav-item>
-        <b-nav-item>
+        </BNavItem>
+        <BNavItem>
           <router-link to="/connections" class="nav-link">{{ $t('activeConnectionsTxt') }}</router-link>
-        </b-nav-item>
-        <b-nav-item target="_blank" :href="goToApiDocs()">
+        </BNavItem>
+        <BNavItem target="_blank" :href="goToApiDocs()">
           <span class="nav-link">{{ $t('docsApiTxt') }}</span>
-        </b-nav-item>
-      </b-navbar-nav>
-    </b-collapse>
+        </BNavItem>
+      </BNavbarNav>
+    </BCollapse>
 
-    <b-navbar-nav right style="flex-direction: row; place-content: flex-end;flex: 1 1 auto;margin-top: 10px;">
-      <b-nav-item id="currentDate">
-        {{ moment(new Date()).format('YYYY-MM-DD') }}
-      </b-nav-item>
-      <b-nav-item class="nav-link warn" v-if="!isHubConnected">{{ $t('hubNotConnectedTxt') }}</b-nav-item>
-      <b-nav-item>
-        <b-button variant="info" @click="keycloak.logout()">{{ $t('logoutTxt') }}</b-button>
-      </b-nav-item>
-      <b-nav-item id="langBtn" @click="toggleLocale">{{ $t('langTxt') }}</b-nav-item>
-    </b-navbar-nav>
-  </b-navbar>
+    <BNavbarNav right style="flex-direction: row; place-content: flex-end;flex: 1 1 auto;margin-top: 10px;">
+      <BNavItem id="currentDate">
+        {{ new Date().toLocaleDateString("en-US") }}
+      </BNavItem>
+      <BNavItem class="nav-link warn" v-if="!isHubConnected">{{ $t('hubNotConnectedTxt') }}</BNavItem>
+      <BNavItem>
+        <BButton variant="info" @click="keycloak.logout()">{{ $t('logoutTxt') }}</BButton>
+      </BNavItem>
+      <BNavItem id="langBtn" @click="toggleLocale">{{ $t('langTxt') }}</BNavItem>
+    </BNavbarNav>
+  </BNavbar>
 
 </template>
 

@@ -1,5 +1,7 @@
-{
-  "langCode":"en",
+const en = {
+  "langCode": "en",
+
+  "loading": "Loading...",
 
   "home_new_patient": "Number of tests performed",
   "home_new_case": "New cases today",
@@ -9,21 +11,21 @@
   "home_new_case_per_site": "Positive cases over time",
   "home_hospitalisation_rate": "Hospitalizations over time",
 
-  "icu":  "Intensive care bed occupation",
+  "icu": "Intensive care bed occupation",
   "hospitalization": "Hospital bed occupation",
   "home_total_occupation": " Total bed occupancy rate",
 
-  "length_of_stay": "Distribution de la durée de séjour par site",
-  "age": "Distribution de l'âge par site",
-  "h/f": "Distribution du sexe par status COVID-19",
+  "length_of_stay": "Distribution of length of stay by site",
+  "age": "Distribution of age by site",
+  "h/f": "Distribution of sex by COVID status",
 
   "home_positivity": " Positivity Rate:{positivity} %",
   "home_average": "Avg. float. {average}",
   "home_rt": " Rate Rt. {rate}",
 
-  "covid_cases":  "Number of covid cases",
+  "covid_cases": "Number of covid cases",
   "death": "Number of death",
-  "ventilator":  "Number of patient on ventilator",
+  "ventilator": "Number of patient on ventilator",
 
   "titleTxt": "Select data",
   "langTxt": "Fr",
@@ -49,7 +51,7 @@
   "addNewMeasure": "+ Add New Measure",
 
   "resourceTxt": "Resources",
-  "selectFieldTxt" : "Select field(s)",
+  "selectFieldTxt": "Select field(s)",
   "resources_add": "Add (+)",
 
   "disable_breakdown": "Disable Breakdown",
@@ -72,7 +74,7 @@
 
   "contTxt": "Continuous",
   "discTxt": "Discrete",
-  "selectContTxt":"Select continuous measure(s)",
+  "selectContTxt": "Select continuous measure(s)",
   "selectDiscTxt": "Select discrete measure(s) ",
 
   "resultsTxt": "Results",
@@ -90,11 +92,11 @@
   "male": "male ",
   "female": "female ",
 
-   "site": "site ",
-   "mean": "mean ",
-   "stdev": "stdev0 ",
-   "ci95": "ci95 ",
-   "count": "count ",
+  "site": "site ",
+  "mean": "mean ",
+  "stdev": "stdev0 ",
+  "ci95": "ci95 ",
+  "count": "count ",
 
   "newSearchTxt": "New Search",
   "summaryTxt": "Summary",
@@ -147,5 +149,6 @@
   "sendPrepareTxt": "Send Prepare Request",
   "sendTrainTxt": "Send Train Request",
   "evaluateResultTxt": "Evaluation Results",
-  "countResultTxt":"Data Count"
+  "countResultTxt": "Data Count"
 }
+export default en

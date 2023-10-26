@@ -1,12 +1,10 @@
-import { sortBy } from "underscore";
-
 const secondsPerDay = 24 * 60 * 60;
 
 function qbRuleToFilter(rule) {
-  if(rule.condition){
+  if (rule.condition) {
     return {
       conditionOperator: rule.condition,
-      conditions : rule.rules.map(rule => qbRuleToFilter(rule))
+      conditions: rule.rules.map(rule => qbRuleToFilter(rule))
     }
   }
   else {
@@ -22,11 +20,11 @@ function qbRuleToFilter(rule) {
 
 function qbBreakdown(cfg) {
   var pstep = Number.parseFloat(cfg.period.step);
-  if(cfg.attributeType == "dateTime"){
+  if (cfg.attributeType == "dateTime") {
     pstep = pstep * secondsPerDay;
   }
   return {
-    resource: { type: cfg.resourceType, field: cfg.resourceAttribute , fieldType: cfg.attributeType},
+    resource: { type: cfg.resourceType, field: cfg.resourceAttribute, fieldType: cfg.attributeType },
     slices: {
       step: pstep,
       min: cfg.period.start,
@@ -41,23 +39,23 @@ function includeFieldforBreakdown(form) {
   const breakdownFieldType = form.breakdown.attributeType;
 
   const resourceIndex = form.qB.findIndex(f => f.name == breakdownResource)
-  if(resourceIndex < 0){//no resource found corresponding to the breakdown -> add resource and field
+  if (resourceIndex < 0) {//no resource found corresponding to the breakdown -> add resource and field
     const resource = {
       name: breakdownResource,
       label: `${breakdownResource}_${++form.qB.length}`,
       query: {
-        rules : []
+        rules: []
       },
       field: [{
-            path: breakdownField,
-            type: breakdownFieldType
-        }]
+        path: breakdownField,
+        type: breakdownFieldType
+      }]
     }
     form.qB.push(resource)
   }
-  else{//resource found
+  else {//resource found
     const fieldIndex = form.qB[resourceIndex].field.findIndex(f => f.path == breakdownField);
-    if(fieldIndex < 0){ //breakdown field not in resource field -> add field
+    if (fieldIndex < 0) { //breakdown field not in resource field -> add field
       const field = {
         path: breakdownField,
         type: breakdownFieldType
@@ -70,7 +68,7 @@ function includeFieldforBreakdown(form) {
 
 export default class SummaryFormFactory {
   static fromForm(dat, brkdwn) {
-    
+
     if (brkdwn && dat.breakdown.resourceType !== "") {
       var selectorBreakdown = qbBreakdown(dat.breakdown);
       includeFieldforBreakdown(dat);
@@ -78,18 +76,17 @@ export default class SummaryFormFactory {
 
     const selectorLength = dat.qB.length;
     var allSelectors = []
-    for(var index=0; index < selectorLength; index++){
+    for (var index = 0; index < selectorLength; index++) {
       var conditions = {
         conditionOperator: dat.qB[index].query.condition,
-        conditions : dat.qB[index].query.rules.map(rule => qbRuleToFilter(rule))
+        conditions: dat.qB[index].query.rules.map(rule => qbRuleToFilter(rule))
       }
       var selector = {
         resource: dat.qB[index].name,
         label: dat.qB[index].label,
         condition: conditions,
-        fields: 
-          dat.qB[index].field.map((el) => 
-          {return { path: el.path,  label:dat.qB[index].label+"_"+el.path, type: el.type}}),
+        fields:
+          dat.qB[index].field.map((el) => { return { path: el.path, label: dat.qB[index].label + "_" + el.path, type: el.type } }),
       };
       allSelectors.push(selector);
     }
@@ -104,10 +101,10 @@ export default class SummaryFormFactory {
       }
     }
 
-    if(brkdwn) {
+    if (brkdwn) {
       queryBody.options.breakdown = selectorBreakdown;
     }
-    
+
     return queryBody
   }
 }

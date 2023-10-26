@@ -5,9 +5,9 @@
     </div>
     <div>{{ $t("federated_simulation") }}</div>
     <br />
-    <b-row>
-      <b-col lg="5" md="8" offset="1">
-        <b-row>
+    <BRow>
+      <BCol lg="5" md="8" offset="1">
+        <BRow>
           <v-card class="learningContainer">
             <div class="panelTitle">
               <span>{{ $t("prepareRequestTxt") }}</span>
@@ -15,24 +15,24 @@
 
             <div class="preparePanel">
               <div class="prepare">
-                <b-form-group id="learningPrepareBodyForm">
-                  <b-form-textarea
+                <BFormGroup id="learningPrepareBodyForm">
+                  <BFormTextarea
                     id="learningPrepareBodyTextArea"
                     size="sm"
                     v-model="prepareBody"
                     rows="20"
-                  ></b-form-textarea>
-                </b-form-group>
-                <b-button block variant="success" @click="getPrepare">{{
+                  ></BFormTextArea>
+                </BFormGroup>
+                <BButton block variant="success" @click="getPrepare">{{
                   $t("sendPrepareTxt")
                 }}
-                <span v-if="isPreparing">(loading)</span></b-button>
+                <span v-if="isPreparing">(loading)</span></BButton>
               </div>
             </div>
           </v-card>
-        </b-row>
+        </BRow>
 
-        <b-row v-if="showTrainInput">
+        <BRow v-if="showTrainInput">
           <v-card class="learningContainer">
             <div class="panelTitle">
               <span>{{ $t("TrainRequestTxt") }}</span>
@@ -40,55 +40,55 @@
 
             <div class="preparePanel">
               <div class="train">
-                <b-form-group id="learningTrainBodyForm">
-                  <b-form-textarea
+                <BFormGroup id="learningTrainBodyForm">
+                  <BFormTextarea
                     id="learningTrainBodyTextArea"
                     size="sm"
                     v-model="trainBody"
                     rows="3"
-                  ></b-form-textarea>
-                </b-form-group>
-                <b-button
+                  ></BFormTextArea>
+                </BFormGroup>
+                <BButton
                   block
                   variant="success"
                   @click="getTrain"
                   :disabled="isTrainButtonDisabled"
                   >{{ $t("sendTrainTxt") }}
                     <span v-if="isTraining">(loading)</span>
-                  </b-button>
+                  </BButton>
               </div>
             </div>
           </v-card>
-        </b-row>
-        <b-row v-if="showCountResult">
+        </BRow>
+        <BRow v-if="showCountResult">
           <v-card class="resultContainer">
             <div class="panelTitle">
               <span>{{ $t("countResultTxt") }}</span>
             </div>
             <div>
-              <b-table striped hover :items="countResult" :fields="countFields"></b-table>
+              <BTable striped hover :items="countResult" :fields="countFields"></BTable>
             </div>
           </v-card>
-        </b-row>
-        <b-row v-if="evaluateCompleted">
+        </BRow>
+        <BRow v-if="evaluateCompleted">
           <v-card class="resultContainer">
             <div class="panelTitle">
               <span>{{ $t("evaluateResultTxt") }}</span>
             </div>
             <div>
-              <b-table striped hover :items="evaluateResult"></b-table>
+              <BTable striped hover :items="evaluateResult"></BTable>
             </div>
           </v-card>
-        </b-row>
-      </b-col>
-      <b-col lg="4" md="4" offset="1" v-if="!inProgress">
-        <b-card class="sitesCard">
-          <b-card-header class="cardHeader text-center">{{
+        </BRow>
+      </BCol>
+      <BCol lg="4" md="4" offset="1" v-if="!inProgress">
+        <BCard class="sitesCard">
+          <BCardHeader class="cardHeader text-center">{{
             $t("activeConnectionsTxt")
-          }}</b-card-header>
-          <b-card-body class="sitesCardBody">
-            <b-form-group>
-              <b-form-checkbox
+          }}</BCardHeader>
+          <BCardBody class="sitesCardBody">
+            <BFormGroup>
+              <BFormCheckbox
                 class="sites-checkbox"
                 v-model="selectedSites"
                 v-for="availableSite in availableSites"
@@ -99,42 +99,42 @@
                 <strong
                   >{{ availableSite.uid }} - {{ availableSite.name }}</strong
                 >
-              </b-form-checkbox>
-            </b-form-group>
-          </b-card-body>
-        </b-card>
-      </b-col>
-      <b-col lg="5" md="8" offset="1" v-if="inProgress">
-        <b-row v-for="metric in metrics" :key="metric.name">
-          <b-overlay
+              </BFormCheckbox>
+            </BFormGroup>
+          </BCardBody>
+        </BCard>
+      </BCol>
+      <BCol lg="5" md="8" offset="1" v-if="inProgress">
+        <BRow v-for="metric in metrics" :key="metric.name">
+          <BOverlay
             :show="showGraphLoading"
             spinner-variant="primary"
             spinner-type="grow"
             rounded="sm"
             class="metricsPanel"
           >
-            <b-card class="metricsCard text-center">
-              <b-card-header class="cardHeader">{{
+            <BCard class="metricsCard text-center">
+              <BCardHeader class="cardHeader">{{
                 metric.name
-              }}</b-card-header>
-              <b-card-body class="metricsCardBody">
+              }}</BCardHeader>
+              <BCardBody class="metricsCardBody">
                 <LearningLineChart
                   :dataToPlot="metric"
                   :data="progressResult"
                 ></LearningLineChart>
-              </b-card-body>
-            </b-card>
-          </b-overlay>
-        </b-row>
-      </b-col>
-      <b-col lg="4" md="4" offset="1" v-if="!inProgress">
+              </BCardBody>
+            </BCard>
+          </BOverlay>
+        </BRow>
+      </BCol>
+      <BCol lg="4" md="4" offset="1" v-if="!inProgress">
         <div>
-          <b-alert v-model="isError" variant="danger" dismissible>
+          <BAlert v-model="isError" variant="danger" dismissible>
             {{ errorMsg }}
-          </b-alert>
+          </BAlert>
         </div>
-      </b-col>
-    </b-row>
+      </BCol>
+    </BRow>
   </v-container>
 </template>
 

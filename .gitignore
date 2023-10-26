@@ -1,8 +1,13 @@
 .DS_Store
 node_modules
 /dist
+
+# CapRover deploys
 deploy.tar
-*.env
+
+# local env files
+.env.local
+.env.*.local
 
 # Log files
 npm-debug.log*
@@ -18,3 +23,4 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+.env
