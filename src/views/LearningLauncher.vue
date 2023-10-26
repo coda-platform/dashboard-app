@@ -88,7 +88,7 @@
           </v-card>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!isTraining" style="padding-top: 16px">
+      <BCol lg="4" md="4" offset="1" v-if="!isTraining && !evaluationInProgress && !evaluateCompleted" style="padding-top: 16px">
         <BCard class="sitesCard">
           <BCardHeader class="cardHeader text-center">
             <div class="panelTitle">
@@ -309,7 +309,7 @@ export default {
           }
           this.progressResult = res.data;
           console.log('Training progress: ', toRaw(this.progressResult))
-          
+
           if (this.progressResult.length != 0) {
             this.showGraphLoading = false;
             if (this.progressResult[0] && 
