@@ -201,7 +201,8 @@
 
             <div v-if="breakdown">
             <div class="row">
-              <div class="col-lg-4 col-md-4">
+              <div class="col-lg-4 col-md-4"
+              style="display: block;">
                 <div>{{ $t("selectResourceTypeTxt") }}</div>
                 <div>
                   <select
@@ -220,7 +221,7 @@
               </div>
               <div
                 class="col-lg-6 col-md-6"
-                style="margin-top: 16px;"
+                style="margin-top: 16px; display: block;"
                 v-if="this.form.breakdown.resourceType"
               >
                 <div>{{ $t("selectResourceAttributeTxt") }}</div>
