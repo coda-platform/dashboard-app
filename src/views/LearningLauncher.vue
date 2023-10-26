@@ -25,7 +25,7 @@
                 </BFormGroup>
                 <BButton block variant="success" @click="getPrepare" class="prepareButton">
                   {{ $t("sendPrepareTxt") }}
-                  <span v-if="isPreparing">(loading)</span></BButton
+                  <span v-if="isPreparing">(Please wait...)</span></BButton
                 >
               </div>
             </div>
@@ -55,7 +55,7 @@
                   @click="getTrain"
                   :disabled="isTrainButtonDisabled"
                   >{{ $t("sendTrainTxt") }}
-                  <span v-if="isTraining">(loading)</span>
+                  <span v-if="isTraining">(Please wait...)</span>
                 </BButton>
               </div>
             </div>
@@ -109,7 +109,7 @@
           </BCardBody>
         </BCard>
       </BCol>
-      <BCol lg="5" md="8" offset="1" v-if="isTraining" :key="chartKey">
+      <BCol lg="5" md="8" offset="1" v-if="isTraining || evaluationInProgress || evaluateCompleted" :key="chartKey">
         <BRow v-for="metric in metrics" v-bind:key="metric.name">
           <BOverlay
             :show="showGraphLoading"
@@ -261,6 +261,7 @@ export default {
           this.isPreparing = false;
           this.countResult = res.data;
           this.showCountResult = true;
+          this.isPrepareButtonDisabled = true;
           this.isTrainButtonDisabled = false;
           this.showTrainInput = true;
         } else if (res.status == 500) {
@@ -355,6 +356,11 @@ export default {
       } else {
         this.selectedSites = [...this.selectedSites, value]
       }
+      if (this.selectedSites.length > 0) {
+        this.isPrepareButtonDisabled = false
+      } else {
+        this.isPrepareButtonDisabled = true
+      }
     }
 
   },
@@ -363,7 +369,8 @@ export default {
       .then((res) => res.data)
       .then((json) => json.connections)
       .then((conn) => {
-        this.availableSites = conn.map(({uid, name}) => ({value: uid, name}));
+        this.availableSites = conn.map(({uid, name}) => ({value: uid, name}))
+        .sort((a, b) => a.name.localeCompare(b.name));
         console.log('Available sites: ', this.availableSites)
       })
   },
@@ -378,6 +385,7 @@ export default {
       showGraphLoading: true,
       showTrainInput: false,
       showCountResult: false,
+      isPrepareButtonDisabled: true,
       isTrainButtonDisabled: false,
       evaluationInProgress: false,
       isPreparing: false,
