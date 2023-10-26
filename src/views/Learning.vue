@@ -243,14 +243,15 @@ export default {
     getSelectedSitesList() {
       const rawData = this.selectedSites
       const sites = isProxy(rawData) ? toRaw(rawData) : [...rawData]
-      console.log('Selected sites', sites)
       return sites.join(",")
     },
     getPrepare() {
       const sitesUri = this.getSelectedSitesList()
       this.isPreparing = true;
 
-      console.log(sitesUri);
+      console.info(`Launching prepare query for sites ${this.getPrepareBody()}, `, 
+        JSON.stringify(this.getPrepareBody(), null, 2))
+        
       LearningApi.getPrepare(this.getPrepareBody(), sitesUri).then((res) => {
         if (res.status == 200) {
           this.jobID = res.data[0].job;

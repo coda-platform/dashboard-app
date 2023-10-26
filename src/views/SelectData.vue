@@ -285,10 +285,11 @@
         </v-card>
       </div>
 
-      <div class="col-lg-6 col-md-4 submit-btn">
+      <div class="submit-btn">
         <BButton
           type="submit"
           :disabled="dataUpdate"
+          class="queryButton"
           v-if="!awaitSubmit"
           >{{ $t("runQueryTxt") }}</BButton
         >

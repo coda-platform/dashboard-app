@@ -63,7 +63,6 @@ body {
     font-weight: bolder;
   }
   .selectionPanel {
-    padding: 16px;
     border-radius: 4px;
     width: 100%;
     border-width: 0px;
@@ -238,12 +237,12 @@ body {
 }
 
 .card-header-tabs .nav-link.active {
-  padding: 16px !important;
+  padding: 8px 16px 8px 16px !important;
 }
 
 .card-header-tabs .nav-link {
   font-weight: bold;
-  padding: 16px !important;
+  padding: 8px 16px 8px 16px !important;
 }
 .tab-content {
   border-width: 0;
@@ -454,4 +453,15 @@ body {
   border-width: 0;
   font-weight: bold;
   float: right;
+}
+
+.queryButton {
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 1px -1px, rgba(0, 0, 0, 0.14) 0px 1px 1px 0px, rgba(0, 0, 0, 0.12) 0px 1px 3px 0px
+}
+
+.btn-primary {
+  &.active {
+    background-color: #114577 !important;
+  }
 }

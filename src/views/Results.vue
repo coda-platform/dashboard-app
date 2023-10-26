@@ -26,6 +26,7 @@
             :head-variant="null"
             :table-variant="'light'"
             :responsive="true"
+            style="padding: 8px;"
           ></BTable>
         </div>
         <v-divider></v-divider>
