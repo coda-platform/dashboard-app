@@ -4,17 +4,16 @@ function qbRuleToFilter(rule) {
   if (rule.condition) {
     return {
       conditionOperator: rule.condition,
-      conditions: rule.rules.map(rule => qbRuleToFilter(rule))
-    }
-  }
-  else {
+      conditions: rule.rules.map((rule) => qbRuleToFilter(rule)),
+    };
+  } else {
     const { type, id, operator, value } = rule;
     return {
       type: type,
       path: id,
       operator: operator,
-      value: value
-    }
+      value: value,
+    };
   }
 }
 
@@ -24,7 +23,11 @@ function qbBreakdown(cfg) {
     pstep = pstep * secondsPerDay;
   }
   return {
-    resource: { type: cfg.resourceType, field: cfg.resourceAttribute, fieldType: cfg.attributeType },
+    resource: {
+      type: cfg.resourceType,
+      field: cfg.resourceAttribute,
+      fieldType: cfg.attributeType,
+    },
     slices: {
       step: pstep,
       min: cfg.period.start,
@@ -38,29 +41,35 @@ function includeFieldforBreakdown(form) {
   const breakdownField = form.breakdown.resourceAttribute;
   const breakdownFieldType = form.breakdown.attributeType;
 
-  const resourceIndex = form.qB.findIndex(f => f.name == breakdownResource)
-  if (resourceIndex < 0) {//no resource found corresponding to the breakdown -> add resource and field
+  const resourceIndex = form.qB.findIndex((f) => f.name == breakdownResource);
+  if (resourceIndex < 0) {
+    //no resource found corresponding to the breakdown -> add resource and field
     const resource = {
       name: breakdownResource,
       label: `${breakdownResource}_${++form.qB.length}`,
       query: {
-        rules: []
+        rules: [],
       },
-      field: [{
-        path: breakdownField,
-        type: breakdownFieldType
-      }]
-    }
-    form.qB.push(resource)
-  }
-  else {//resource found
-    const fieldIndex = form.qB[resourceIndex].field.findIndex(f => f.path == breakdownField);
-    if (fieldIndex < 0) { //breakdown field not in resource field -> add field
+      field: [
+        {
+          path: breakdownField,
+          type: breakdownFieldType,
+        },
+      ],
+    };
+    form.qB.push(resource);
+  } else {
+    //resource found
+    const fieldIndex = form.qB[resourceIndex].field.findIndex(
+      (f) => f.path == breakdownField,
+    );
+    if (fieldIndex < 0) {
+      //breakdown field not in resource field -> add field
       const field = {
         path: breakdownField,
-        type: breakdownFieldType
-      }
-      form.qB[resourceIndex].field.push(field)
+        type: breakdownFieldType,
+      };
+      form.qB[resourceIndex].field.push(field);
     }
     //else if fieldIndex > 0, do nothing
   }
@@ -68,25 +77,31 @@ function includeFieldforBreakdown(form) {
 
 export default class SummaryFormFactory {
   static fromForm(dat, brkdwn) {
-
     if (brkdwn && dat.breakdown.resourceType !== "") {
       var selectorBreakdown = qbBreakdown(dat.breakdown);
       includeFieldforBreakdown(dat);
     }
 
     const selectorLength = dat.qB.length;
-    var allSelectors = []
+    var allSelectors = [];
     for (var index = 0; index < selectorLength; index++) {
       var conditions = {
         conditionOperator: dat.qB[index].query.condition,
-        conditions: dat.qB[index].query.rules.map(rule => qbRuleToFilter(rule))
-      }
+        conditions: dat.qB[index].query.rules.map((rule) =>
+          qbRuleToFilter(rule),
+        ),
+      };
       var selector = {
         resource: dat.qB[index].name,
         label: dat.qB[index].label,
         condition: conditions,
-        fields:
-          dat.qB[index].field.map((el) => { return { path: el.path, label: dat.qB[index].label + "_" + el.path, type: el.type } }),
+        fields: dat.qB[index].field.map((el) => {
+          return {
+            path: el.path,
+            label: dat.qB[index].label + "_" + el.path,
+            type: el.type,
+          };
+        }),
       };
       allSelectors.push(selector);
     }
@@ -97,14 +112,14 @@ export default class SummaryFormFactory {
         measures: {
           continuous: dat.measures.cont.map((el) => el.value),
           categorical: dat.measures.disc.map((el) => el.value),
-        }
-      }
-    }
+        },
+      },
+    };
 
     if (brkdwn) {
       queryBody.options.breakdown = selectorBreakdown;
     }
 
-    return queryBody
+    return queryBody;
   }
 }

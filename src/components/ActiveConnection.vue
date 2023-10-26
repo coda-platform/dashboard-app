@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-row>
-      <v-col cols="1" style="margin: auto 0; text-align: center;">
+      <v-col cols="1" style="margin: auto 0; text-align: center">
         <span class="circle blink"></span>
       </v-col>
       <v-col cols="11">
@@ -21,13 +21,13 @@
 
 <script>
 export default {
-    props: [ 'uid', 'name', 'conn' ]
+  props: ["uid", "name", "conn"],
 };
 </script>
 
 <style scoped>
 .circle:before {
-  content: '\25CF';
+  content: "\25CF";
   font-size: 50px;
 }
 

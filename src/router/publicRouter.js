@@ -1,12 +1,12 @@
 // Composables
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from "vue-router";
 
-const routes = []
+const routes = [];
 
 const publicRouter = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
-    linkExactActiveClass: "active",
-    routes,
-})
+  history: createWebHistory(process.env.BASE_URL),
+  linkExactActiveClass: "active",
+  routes,
+});
 
-export default publicRouter
+export default publicRouter;

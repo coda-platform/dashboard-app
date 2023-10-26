@@ -1,5 +1,5 @@
 <template>
-  <v-chart class="chart" ref="barChart" :option="option"/>
+  <v-chart class="chart" ref="barChart" :option="option" />
 </template>
 
 <script>
@@ -9,7 +9,7 @@ import { BarChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 } from "echarts/components";
 import VChart from "vue-echarts";
 
@@ -18,12 +18,12 @@ use([
   BarChart,
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 ]);
 
 export default {
   name: "BarChart",
-  props:{
+  props: {
     colors: Array,
     data: Array,
     category: Array,
@@ -34,353 +34,378 @@ export default {
     horizontal: Boolean,
     margin: Array,
     unit: String,
-    stack : String,
+    stack: String,
   },
-  components:{
-    'v-chart': VChart
+  components: {
+    "v-chart": VChart,
   },
   created() {
-    window.addEventListener("resize", ()=>{
+    window.addEventListener("resize", () => {
       const barChart = this.$refs.barChart;
-      if (barChart && Object.hasOwnProperty.bind(barChart)('resize'))  barChart.resize();
+      if (barChart && Object.hasOwnProperty.bind(barChart)("resize"))
+        barChart.resize();
     });
   },
-  computed:{
-    option(){
-
-      if(!this.data){
+  computed: {
+    option() {
+      if (!this.data) {
         return this.getBaseOptions();
-      }
-
-      else
-        return this.getOptions();
-    }
+      } else return this.getOptions();
+    },
   },
-  watch:{
-    'highlight':function(newVal, oldVal){
+  watch: {
+    highlight: function (newVal, oldVal) {
       let sites = this.category;
       let dataIndex = sites.indexOf(newVal),
-          oldIndex = sites.indexOf(oldVal);
+        oldIndex = sites.indexOf(oldVal);
 
       const barChart = this.$refs.barChart;
       barChart.dispatchAction({
-        type: 'downplay',
-        dataIndex: oldIndex
-      })
+        type: "downplay",
+        dataIndex: oldIndex,
+      });
       barChart.dispatchAction({
-        type: 'highlight',
-        dataIndex: dataIndex
-      })
-    }
+        type: "highlight",
+        dataIndex: dataIndex,
+      });
+    },
   },
-  methods:{
-    getBaseOptions(){
-       return {
-        title:{
-          show:false,
-          text: '',
-          left: 'center',
-          bottom: '0'
+  methods: {
+    getBaseOptions() {
+      return {
+        title: {
+          show: false,
+          text: "",
+          left: "center",
+          bottom: "0",
         },
         tooltip: {},
-        toolbox:{
-          show:true,
-          feature:{
-            saveAsImage:{
-              show:true,
-              title: "saveImgTxt"
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: "saveImgTxt",
             },
             // magicType:{show: true, type: ['stack']}
-          }
+          },
         },
         color: this.colors,
         grid: {
           containLabel: true,
-          left:10,
-          bottom:20
+          left: 10,
+          bottom: 20,
         },
-        xAxis: {type: 'category'},
-        yAxis: {type: 'value',
+        xAxis: { type: "category" },
+        yAxis: {
+          type: "value",
           axisLine: {
-            show: true
-          }}
+            show: true,
+          },
+        },
       };
     },
-    getOptions(){
+    getOptions() {
       const option = this.getBaseOptions();
 
-      var categories = this.category
+      var categories = this.category;
       //     .map(cat=>{
       //   return this.labels[cat]?this.labels[cat][this.$i18n.locale] : cat
       // })
 
-      if(this.horizontal){
-        option.yAxis=[{
-          type:'category',
-          data:categories,
-          inverse: true
-        }];
+      if (this.horizontal) {
+        option.yAxis = [
+          {
+            type: "category",
+            data: categories,
+            inverse: true,
+          },
+        ];
 
-        option.xAxis= {type: 'value'}
-      }
-      else{
-        option.xAxis=[{
-          type:'category',
-          data:categories
-        }];
+        option.xAxis = { type: "value" };
+      } else {
+        option.xAxis = [
+          {
+            type: "category",
+            data: categories,
+          },
+        ];
       }
 
       const seriesOpt = this.getSeriesOptions(),
-          legend = this.getLegend(),
-          tooltip = this.getTooltip();
+        legend = this.getLegend(),
+        tooltip = this.getTooltip();
 
       option.series = seriesOpt;
       option.legend = legend;
-      if(tooltip)
-        option.tooltip = tooltip;
+      if (tooltip) option.tooltip = tooltip;
 
-
-      if(this.title){
-        option.title.text = this.title
+      if (this.title) {
+        option.title.text = this.title;
         option.title.show = true;
       }
 
-
       return option;
-
     },
-    getSeriesOptions(){
+    getSeriesOptions() {
       var seriesOpt;
 
-      if(this.group){
+      if (this.group) {
         seriesOpt = [];
-        this.group.forEach((serie,idx)=>{
+        this.group.forEach((serie, idx) => {
           seriesOpt.push({
-            type: 'bar',
-            data: this.stack ? this.data[idx] : this.data.map(a=>{return a[idx]}),
-            name: serie ,
-            stack: this.stack ? this.stack : '',
+            type: "bar",
+            data: this.stack
+              ? this.data[idx]
+              : this.data.map((a) => {
+                  return a[idx];
+                }),
+            name: serie,
+            stack: this.stack ? this.stack : "",
             itemStyle: {
               color: () => {
-                return this.colors[idx]
-              }
-            }
-          })
-        })
-      }
-
-      else{
-        seriesOpt = [ {
-          type: 'bar',
-          // emphasis: {
-          //   focus: 'self'
-          // },
-          label:{
-            show: true,
-            color: '#fff',
-            formatter:  this.unit ? '{c} ' +this.unit : '{c}'
+                return this.colors[idx];
+              },
+            },
+          });
+        });
+      } else {
+        seriesOpt = [
+          {
+            type: "bar",
+            // emphasis: {
+            //   focus: 'self'
+            // },
+            label: {
+              show: true,
+              color: "#fff",
+              formatter: this.unit ? "{c} " + this.unit : "{c}",
+            },
+            data: this.unit === "%" ? this.data.map((d) => d * 100) : this.data,
+            itemStyle: {
+              color: (param) => {
+                return this.colors[param.dataIndex];
+              },
+            },
+            stack: this.stack ? this.stack : "",
           },
-          data: this.unit === "%" ? this.data.map(d=>d*100) : this.data,
-          itemStyle: {
-            color: (param) => {
-              return this.colors[param.dataIndex]
-            }
-          }, 
-          stack: this.stack ? this.stack : '',
-        }];
-
+        ];
       }
 
-      if(this.margin){
+      if (this.margin) {
         const encodeY = [];
         for (let i = 0; i < 3; i++) {
           encodeY.push(1 + i);
         }
 
-        if(this.group){
+        if (this.group) {
           let _this = this;
           seriesOpt = this.data.map(function (data, index) {
             return {
-              type: 'bar',
+              type: "bar",
               name: _this.group[index],
               animation: false,
               itemStyle: {
-                opacity: 0.8
+                opacity: 0.8,
               },
-              data: data
+              data: data,
             };
-          })
+          });
         }
 
         seriesOpt.push({
-          type: 'custom',
-          name: 'margin',
+          type: "custom",
+          name: "margin",
           renderItem: this.renderItem,
-          encode: { x: 0, y: encodeY},
+          encode: { x: 0, y: encodeY },
           data: this.margin,
-          z: 100
+          z: 100,
         });
       }
 
       return seriesOpt;
     },
-    getLegend(){
-      var legend, selectedMode = true;
-      if(this.group){
+    getLegend() {
+      var legend,
+        selectedMode = true;
+      if (this.group) {
         var group = [];
-        for (let i = 0; i <this.group.length; i++) {
-	        group[i] = this.group[i];
+        for (let i = 0; i < this.group.length; i++) {
+          group[i] = this.group[i];
         }
-        if(this.margin)
-          selectedMode = false
+        if (this.margin) selectedMode = false;
 
-        legend = {data : group, bottom: 0, selectedMode : selectedMode};
+        legend = { data: group, bottom: 0, selectedMode: selectedMode };
       }
 
-      return legend
+      return legend;
     },
-    getTooltip(){
+    getTooltip() {
       var tooltip;
-      if(this.margin){
+      if (this.margin) {
         tooltip = {
-          trigger: 'axis',
+          trigger: "axis",
           axisPointer: {
-            type: 'shadow'
-          }
-        }
+            type: "shadow",
+          },
+        };
 
-        if(!this.group){
+        if (!this.group) {
           tooltip.formatter = (params) => {
-            var icon =params[0].marker,
-                category = params[0].name,
-                value = `<b>${params[0].value}</b>`,
-                margin = params[1]?`${params[1].value[1]}-${params[1].value[2]}`:"",
-                tooltip = `<div style="display: flex;flex-direction: row;min-width:80px"><div style="display:flex;flex-direction:column"><div>${icon}${category}</div> </div><div style="display:flex;flex-direction:column;text-align: right"><div style="margin-left:5px">${value}</div><div>${margin}</div></div>`
+            var icon = params[0].marker,
+              category = params[0].name,
+              value = `<b>${params[0].value}</b>`,
+              margin = params[1]
+                ? `${params[1].value[1]}-${params[1].value[2]}`
+                : "",
+              tooltip = `<div style="display: flex;flex-direction: row;min-width:80px"><div style="display:flex;flex-direction:column"><div>${icon}${category}</div> </div><div style="display:flex;flex-direction:column;text-align: right"><div style="margin-left:5px">${value}</div><div>${margin}</div></div>`;
 
             return tooltip;
-          }
-        }
-        else{
+          };
+        } else {
           tooltip.formatter = (params) => {
             var tooltip = `<span>${params[0].name}</span>`;
-            params.forEach((param,idx)=>{
-              if(param.seriesType !== 'custom'){
-                var category =  `<div>${param.marker} ${param.seriesName}</div>`;
-                var value = `<div><b>${param.value}</b>(${params[params.length - 1].value[idx+1].join('-')})</div>`
-                tooltip +=`<div style="display:flex;flex-direction: row;min-width:100px;justify-content: space-between">${category+value}</div>`
+            params.forEach((param, idx) => {
+              if (param.seriesType !== "custom") {
+                var category = `<div>${param.marker} ${param.seriesName}</div>`;
+                var value = `<div><b>${param.value}</b>(${params[
+                  params.length - 1
+                ].value[idx + 1].join("-")})</div>`;
+                tooltip += `<div style="display:flex;flex-direction: row;min-width:100px;justify-content: space-between">${
+                  category + value
+                }</div>`;
               }
-            })
+            });
 
             return tooltip;
-          }
+          };
         }
       }
       return tooltip;
     },
     renderItem(params, api) {
       const xValue = api.value(0),
-          halfWidth = 5,
-          style = {
-            stroke: "#333",
-            fill: null,
-            lineWidth: 1.5
-          };
+        halfWidth = 5,
+        style = {
+          stroke: "#333",
+          fill: null,
+          lineWidth: 1.5,
+        };
 
-      if(this.group){
-
+      if (this.group) {
         var currentSeriesIndices = api.currentSeriesIndices();
         var barLayout = api.barLayout({
-          barGap: '30%', barCategoryGap: '20%', count: currentSeriesIndices.length - 1
+          barGap: "30%",
+          barCategoryGap: "20%",
+          count: currentSeriesIndices.length - 1,
         });
 
         var points = [];
         for (var i = 0; i < currentSeriesIndices.length; i++) {
           var seriesIndex = currentSeriesIndices[i];
           if (seriesIndex !== params.seriesIndex) {
-            var lowpoint = api.coord([xValue, this.margin[params.dataIndex][i+1][0]]);
-            var highpoint = api.coord([xValue, this.margin[params.dataIndex][i+1][1]]);
+            var lowpoint = api.coord([
+              xValue,
+              this.margin[params.dataIndex][i + 1][0],
+            ]);
+            var highpoint = api.coord([
+              xValue,
+              this.margin[params.dataIndex][i + 1][1],
+            ]);
             lowpoint[0] += barLayout[i].offsetCenter;
             highpoint[0] += barLayout[i].offsetCenter;
-            points.push({lowPoint: lowpoint, highPoint: highpoint});
+            points.push({ lowPoint: lowpoint, highPoint: highpoint });
           }
         }
 
-
         var children = [];
 
-        points.map(point=>{
+        points.map((point) => {
           children.push({
-            type: 'line',
-            transition: ['shape'],
+            type: "line",
+            transition: ["shape"],
             shape: {
-              x1: point.lowPoint[0] - halfWidth, y1: point.lowPoint[1],
-              x2: point.lowPoint[0] + halfWidth, y2: point.lowPoint[1]
+              x1: point.lowPoint[0] - halfWidth,
+              y1: point.lowPoint[1],
+              x2: point.lowPoint[0] + halfWidth,
+              y2: point.lowPoint[1],
             },
-            style: style
+            style: style,
           });
           children.push({
-            type: 'line',
-            transition: ['shape'],
+            type: "line",
+            transition: ["shape"],
             shape: {
-              x1: point.highPoint[0] - halfWidth, y1: point.highPoint[1],
-              x2: point.highPoint[0] + halfWidth, y2: point.highPoint[1]
+              x1: point.highPoint[0] - halfWidth,
+              y1: point.highPoint[1],
+              x2: point.highPoint[0] + halfWidth,
+              y2: point.highPoint[1],
             },
-            style: style
+            style: style,
           });
           children.push({
-            type: 'line',
-            transition: ['shape'],
+            type: "line",
+            transition: ["shape"],
             shape: {
-              x1: point.highPoint[0], y1: point.highPoint[1],
-              x2: point.lowPoint[0], y2: point.lowPoint[1]
+              x1: point.highPoint[0],
+              y1: point.highPoint[1],
+              x2: point.lowPoint[0],
+              y2: point.lowPoint[1],
             },
-            style: style
-          })
-
-        })
+            style: style,
+          });
+        });
 
         return {
-          type: 'group',
-          children: children
+          type: "group",
+          children: children,
         };
       }
 
       const highPoint = api.coord([xValue, api.value(1)]),
-          lowPoint = api.coord([xValue, api.value(2)]);
+        lowPoint = api.coord([xValue, api.value(2)]);
 
       return {
-        type: 'group',
-        children: [{
-          type: 'line',
-          transition: ['shape'],
-          shape: {
-            x1: highPoint[0] - halfWidth, y1: highPoint[1],
-            x2: highPoint[0] + halfWidth, y2: highPoint[1]
+        type: "group",
+        children: [
+          {
+            type: "line",
+            transition: ["shape"],
+            shape: {
+              x1: highPoint[0] - halfWidth,
+              y1: highPoint[1],
+              x2: highPoint[0] + halfWidth,
+              y2: highPoint[1],
+            },
+            style: style,
           },
-          style: style
-        }, {
-          type: 'line',
-          transition: ['shape'],
-          shape: {
-            x1: highPoint[0], y1: highPoint[1],
-            x2: lowPoint[0], y2: lowPoint[1]
+          {
+            type: "line",
+            transition: ["shape"],
+            shape: {
+              x1: highPoint[0],
+              y1: highPoint[1],
+              x2: lowPoint[0],
+              y2: lowPoint[1],
+            },
+            style: style,
           },
-          style: style
-        }, {
-          type: 'line',
-          transition: ['shape'],
-          shape: {
-            x1: lowPoint[0] - halfWidth, y1: lowPoint[1],
-            x2: lowPoint[0] + halfWidth, y2: lowPoint[1]
+          {
+            type: "line",
+            transition: ["shape"],
+            shape: {
+              x1: lowPoint[0] - halfWidth,
+              y1: lowPoint[1],
+              x2: lowPoint[0] + halfWidth,
+              y2: lowPoint[1],
+            },
+            style: style,
           },
-          style: style
-        }]
+        ],
       };
-}
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -21,12 +21,12 @@
                     size="sm"
                     v-model="prepareBody"
                     rows="20"
-                  ></BFormTextArea>
+                  ></BFormTextarea>
                 </BFormGroup>
-                <BButton block variant="success" @click="getPrepare">{{
-                  $t("sendPrepareTxt")
-                }}
-                <span v-if="isPreparing">(loading)</span></BButton>
+                <BButton block variant="success" @click="getPrepare"
+                  >{{ $t("sendPrepareTxt") }}
+                  <span v-if="isPreparing">(loading)</span></BButton
+                >
               </div>
             </div>
           </v-card>
@@ -46,7 +46,7 @@
                     size="sm"
                     v-model="trainBody"
                     rows="3"
-                  ></BFormTextArea>
+                  ></BFormTextarea>
                 </BFormGroup>
                 <BButton
                   block
@@ -54,8 +54,8 @@
                   @click="getTrain"
                   :disabled="isTrainButtonDisabled"
                   >{{ $t("sendTrainTxt") }}
-                    <span v-if="isTraining">(loading)</span>
-                  </BButton>
+                  <span v-if="isTraining">(loading)</span>
+                </BButton>
               </div>
             </div>
           </v-card>
@@ -66,7 +66,12 @@
               <span>{{ $t("countResultTxt") }}</span>
             </div>
             <div>
-              <BTable striped hover :items="countResult" :fields="countFields"></BTable>
+              <BTable
+                striped
+                hover
+                :items="countResult"
+                :fields="countFields"
+              ></BTable>
             </div>
           </v-card>
         </BRow>
@@ -114,9 +119,7 @@
             class="metricsPanel"
           >
             <BCard class="metricsCard text-center">
-              <BCardHeader class="cardHeader">{{
-                metric.name
-              }}</BCardHeader>
+              <BCardHeader class="cardHeader">{{ metric.name }}</BCardHeader>
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
                   :dataToPlot="metric"
@@ -151,22 +154,20 @@ export default {
       this.isPreparing = true;
 
       console.log(sitesUri);
-      LearningApi.getPrepare(this.prepareBody, sitesUri)
-        .then((res) => {
-          if(res.status == 200){
-            this.jobID = res.data[0].job;
-            this.trainBody = `{"job": "${this.jobID}","rounds": 10}`
-            this.isPreparing = false;
-            this.countResult  = res.data;
-            this.showCountResult = true;
-            this.isTrainButtonDisabled = false;
-            this.showTrainInput = true;
-          }
-          else if(res.status == 500){
-            this.isError = true
-            this.errorMsg = res.message
-          }
-        });
+      LearningApi.getPrepare(this.prepareBody, sitesUri).then((res) => {
+        if (res.status == 200) {
+          this.jobID = res.data[0].job;
+          this.trainBody = `{"job": "${this.jobID}","rounds": 10}`;
+          this.isPreparing = false;
+          this.countResult = res.data;
+          this.showCountResult = true;
+          this.isTrainButtonDisabled = false;
+          this.showTrainInput = true;
+        } else if (res.status == 500) {
+          this.isError = true;
+          this.errorMsg = res.message;
+        }
+      });
     },
     getTrain() {
       this.progressResult = [];
@@ -178,52 +179,49 @@ export default {
         this.getProgress();
       }, 2000);
       const sitesUri = this.selectedSites.join(",");
-      LearningApi.getTrain(this.trainBody, sitesUri).then((res) => {
-        if(res.status == 200){
-          clearInterval(this.progressInterval);
-          this.getProgress();
-          this.getEvaluate();
+      LearningApi.getTrain(this.trainBody, sitesUri)
+        .then((res) => {
+          if (res.status == 200) {
+            clearInterval(this.progressInterval);
+            this.getProgress();
+            this.getEvaluate();
+            this.isTraining = false;
+          } else if (res.status == 500) {
+            this.isError = true;
+            this.errorMsg = res.message;
+          }
+        })
+        .catch((error) => {
+          console.log("Error during training: ", error);
           this.isTraining = false;
-        }
-        else if(res.status == 500){
-            this.isError = true
-            this.errorMsg = res.message
-        }
-      })
-      .catch((error) => {
-        this.isTraining = false;
-      });
+        });
     },
     getProgress() {
       const sitesUri = this.selectedSites.join(",");
-      LearningApi.getProgress(this.progressBody, sitesUri)
-        .then((res) =>{
-          if(res.status == 200){
-            this.progressResult = res.data
-            this.inProgress = true;
-            if (this.progressResult.length != 0) this.showGraphLoading = false;
-          }
-          else if(res.status == 500){
-            this.isError = true
-            this.errorMsg = res.message
-          }
-        })
+      LearningApi.getProgress(this.progressBody, sitesUri).then((res) => {
+        if (res.status == 200) {
+          this.progressResult = res.data;
+          this.inProgress = true;
+          if (this.progressResult.length != 0) this.showGraphLoading = false;
+        } else if (res.status == 500) {
+          this.isError = true;
+          this.errorMsg = res.message;
+        }
+      });
     },
     getEvaluate() {
       const sitesUri = this.selectedSites.join(",");
 
-      LearningApi.getEvaluate(this.evaluateBody, sitesUri)
-        .then((res) =>{
-          if(res.status == 200){
-            this.evaluateCompleted = true;
-            this.evaluateResult = res.data;
-          }
-          else if(res.status == 500){
-            this.isError = true
-            this.errorMsg = res.message
-          }
-        })
-    }
+      LearningApi.getEvaluate(this.evaluateBody, sitesUri).then((res) => {
+        if (res.status == 200) {
+          this.evaluateCompleted = true;
+          this.evaluateResult = res.data;
+        } else if (res.status == 500) {
+          this.isError = true;
+          this.errorMsg = res.message;
+        }
+      });
+    },
   },
   async created() {
     await SiteApi.get()
@@ -231,16 +229,16 @@ export default {
       .then((json) => json.connections)
       .then((conn) => {
         this.availableSites = conn;
-        conn.forEach(conn => {
-          this.selectedSites.push(conn.uid)
+        conn.forEach((conn) => {
+          this.selectedSites.push(conn.uid);
         });
       });
   },
   data() {
     return {
       isError: false,
-      errorMsg: '',
-      trainBody: '',
+      errorMsg: "",
+      trainBody: "",
       selectedSites: [],
       availableSites: [],
       showGraphLoading: true,
@@ -315,7 +313,7 @@ export default {
             "config": {
               "name": "sequential_1",
               "layers": [
-                  "etc..."
+                  "A default model will be used for this demo."
               ]
             }
           },
@@ -334,7 +332,7 @@ export default {
               "validation_split": 0.33,
               "evaluation_split": 0.2,
               "epochs": 1,
-              "batch_size": 20,
+              "batch_size": 2,
               "shuffle": 1000
             }
           },
@@ -351,12 +349,12 @@ export default {
     };
   },
   computed: {
-    progressBody: function() {
+    progressBody: function () {
       return `{"job": "${this.jobID}"}`;
     },
-    evaluateBody: function() {
+    evaluateBody: function () {
       return `{"job": "${this.jobID}"}`;
-    }
+    },
   },
 };
 </script>

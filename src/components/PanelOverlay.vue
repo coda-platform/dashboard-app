@@ -1,17 +1,16 @@
 <template>
   <div v-if="!dataReady || dataError" class="hover">
-
-<!--    Spinner-->
+    <!--    Spinner-->
     <div v-if="!dataReady && !dataError" class="spinner">
       <v-progress-circular
-          :size="70"
-          :width="7"
-          color="#ccc"
-          indeterminate
+        :size="70"
+        :width="7"
+        color="#ccc"
+        indeterminate
       ></v-progress-circular>
     </div>
 
-<!--    Error message-->
+    <!--    Error message-->
     <div v-if="dataError" class="errorMsg">
       <div class="msgContainer">
         <div class="center-block"><i class="fas fa-info-circle fa-5x"></i></div>
@@ -22,15 +21,15 @@
 </template>
 
 <script>
-import '@fortawesome/fontawesome-free/js/solid.js'
-import '@fortawesome/fontawesome-free/js/fontawesome.js'
+import "@fortawesome/fontawesome-free/js/solid.js";
+import "@fortawesome/fontawesome-free/js/fontawesome.js";
 export default {
   name: "PanelOverlay",
-  props:{
+  props: {
     dataReady: Boolean,
-    dataError: Boolean
-  }
-}
+    dataError: Boolean,
+  },
+};
 </script>
 
 <style scoped>
@@ -40,30 +39,29 @@ export default {
   position: absolute;
   z-index: 10;
 }
-.spinner{
+.spinner {
   margin: auto;
   position: relative;
   text-align: center;
-  top: calc( 50% - 35px );
+  top: calc(50% - 35px);
 }
-.errorMsg{
+.errorMsg {
   background: #ffffff;
   width: 100%;
-  height:100%;
+  height: 100%;
 }
-.msgContainer{
+.msgContainer {
   position: relative;
   top: 100px;
   display: flex;
   flex-direction: column;
   text-align: center;
 }
-b{
+b {
   font-size: 1.5rem;
 }
-.center-block{
+.center-block {
   color: #ccc;
   margin-bottom: 15px;
 }
-
 </style>

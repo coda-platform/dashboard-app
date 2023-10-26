@@ -1,17 +1,17 @@
 <template>
-  <v-chart class="chart" ref="MultiLineChart" :option="option"/>
+  <v-chart class="chart" ref="MultiLineChart" :option="option" />
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 import { use } from "echarts/core";
 import { CanvasRenderer } from "echarts/renderers";
-import {LineChart} from "echarts/charts";
+import { LineChart } from "echarts/charts";
 import {
   TooltipComponent,
   LegendComponent,
   GridComponent,
-  ToolboxComponent
+  ToolboxComponent,
 } from "echarts/components";
 import VChart from "vue-echarts";
 import { zip } from "underscore";
@@ -24,58 +24,69 @@ use([
   LegendComponent,
   GridComponent,
   ToolboxComponent,
-  LineChart
+  LineChart,
 ]);
 
-const hasCI = (dataSeries) => ["ll", "ul"].every(el => Object.keys(dataSeries).includes(el));
+const hasCI = (dataSeries) =>
+  ["ll", "ul"].every((el) => Object.keys(dataSeries).includes(el));
 
 export default {
   name: "MultiLineChart",
   components: { VChart },
   props: {
     data: Array,
-    dates: Array
+    dates: Array,
   },
   methods: {
-    onResize() { this.$refs.MultiLineChart.resize(); },
+    onResize() {
+      this.$refs.MultiLineChart.resize();
+    },
     getLineStyle(dataSeries) {
       switch (dataSeries.type) {
-        case 'normal': return 'solid';
-        case 'predic': return 'dashed';
-        default: console.error(`unknown data series (${dataSeries.type}) to style`);
+        case "normal":
+          return "solid";
+        case "predic":
+          return "dashed";
+        default:
+          console.error(`unknown data series (${dataSeries.type}) to style`);
       }
     },
     toCIStyle(dataSeries) {
-      if (!hasCI(dataSeries))
-        return [];
+      if (!hasCI(dataSeries)) return [];
 
       const name = dataSeries.name;
-      return [{
-        name: name,
-        type: 'line',
-        data: dataSeries.ll,
-        lineStyle: { opacity: 0 },
-        stack: name + 'ci',
-        symbol: 'none'
-      }, {
-        name: name,
-        type: 'line',
-        data: zip(dataSeries.ll, dataSeries.ul).map(arr => arr[1] - arr[0]),
-        lineStyle: { opacity: 0 },
-        areaStyle: { color: '#ccc'},
-        stack: name + 'ci',
-        symbol: 'none'
-      }];
+      return [
+        {
+          name: name,
+          type: "line",
+          data: dataSeries.ll,
+          lineStyle: { opacity: 0 },
+          stack: name + "ci",
+          symbol: "none",
+        },
+        {
+          name: name,
+          type: "line",
+          data: zip(dataSeries.ll, dataSeries.ul).map((arr) => arr[1] - arr[0]),
+          lineStyle: { opacity: 0 },
+          areaStyle: { color: "#ccc" },
+          stack: name + "ci",
+          symbol: "none",
+        },
+      ];
     },
     toSeriesStyle(data) {
-      return [{
-        name: data.name,
-        type: 'line',
-        lineStyle: { type: this.getLineStyle(data) },
-        stack: '',
-        smooth: true,
-        data: data.est
-      }, ...this.toCIStyle(data)];
+      return [
+        {
+          name: data.name,
+          type: "line",
+          lineStyle: { type: this.getLineStyle(data) },
+          stack: "",
+          smooth: true,
+          data: data.est,
+        },
+        ...this.toCIStyle(data),
+      ];
     },
     getTooltipFormatter() {
       let ComponentClass = defineComponent(TooltipLineFormatter);
@@ -84,39 +95,45 @@ export default {
           propsData: {
             date: series[0].name,
             data: this.data,
-            series: series
-          }
+            series: series,
+          },
         });
         instance.$mount();
         return instance.$el;
       };
-    }
+    },
   },
-  mounted() { window.addEventListener("resize", this.onResize); },
-  beforeUnmount() { window.removeEventListener('resize', this.onResize); },
-  computed:{
+  mounted() {
+    window.addEventListener("resize", this.onResize);
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.onResize);
+  },
+  computed: {
     option() {
       return {
         tooltip: {
-          trigger: 'axis', formatter: this.getTooltipFormatter(),
+          trigger: "axis",
+          formatter: this.getTooltipFormatter(),
         },
-        legend: { data: this.data ? this.data.map(el => el.name): [] },
-        grid: { bottom: '3%', containLabel: true },
+        legend: { data: this.data ? this.data.map((el) => el.name) : [] },
+        grid: { bottom: "3%", containLabel: true },
         toolbox: { feature: { saveAsImage: {} } },
         xAxis: {
-          type: 'category',
+          type: "category",
           boundaryGap: false,
-          data: this.dates ? this.dates.map(dateTime => dateTime.toFormat('LLL dd')) : [] // Luxon Format
+          data: this.dates
+            ? this.dates.map((dateTime) => dateTime.toFormat("LLL dd"))
+            : [], // Luxon Format
         },
         yAxis: {
-          type: 'value'
+          type: "value",
         },
-        series: this.data ? this.data.map(this.toSeriesStyle).flat() : []
+        series: this.data ? this.data.map(this.toSeriesStyle).flat() : [],
       };
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

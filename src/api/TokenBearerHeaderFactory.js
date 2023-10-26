@@ -1,15 +1,13 @@
-import TokenContext from "./TokenContext"
+import TokenContext from "./TokenContext";
 
 function get() {
-    return {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ' + TokenContext.getToken(),
-        'Content-Type': 'application/json',
-    }
+  return {
+    Accept: "application/json",
+    Authorization: "Bearer " + TokenContext.getToken(),
+    "Content-Type": "application/json",
+  };
 }
-
-
 
 export default {
-    get
-}
+  get,
+};

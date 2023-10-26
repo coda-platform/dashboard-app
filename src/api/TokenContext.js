@@ -1,14 +1,14 @@
-let token = '';
+let token = "";
 
 function setToken(newToken) {
-    token = newToken;
+  token = newToken;
 }
 
 function getToken() {
-    return token;
+  return token;
 }
 
 export default {
-    getToken,
-    setToken
-}
+  getToken,
+  setToken,
+};

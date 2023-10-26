@@ -1,5 +1,5 @@
 <template>
-  <v-chart class='chart' ref="gauge" :option="option"/>
+  <v-chart class="chart" ref="gauge" :option="option" />
 </template>
 
 <script>
@@ -9,100 +9,99 @@ import "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
 } from "echarts/components";
 import VChart from "vue-echarts";
 
-use([
-  CanvasRenderer,
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent
-]);
+use([CanvasRenderer, TitleComponent, TooltipComponent, LegendComponent]);
 
 export default {
   name: "Gauge",
-  components: { VChart},
+  components: { VChart },
   props: {
-    value: Number
+    value: Number,
   },
   created() {
-    window.addEventListener("resize", ()=>{
+    window.addEventListener("resize", () => {
       const gauge = this.$refs.gauge;
-      if (gauge && Object.hasOwnProperty.bind(gauge)('resize'))  gauge.resize();
+      if (gauge && Object.hasOwnProperty.bind(gauge)("resize")) gauge.resize();
     });
   },
   computed: {
-    option(){
+    option() {
       const option = {
-        series: [{
-          type: 'gauge',
-          startAngle: 180,
-          endAngle: 0,
-          splitNumber: 5,
-          radius: '80%',
-          center:['50%','70%'],
-          progress: {
-            show: true,
-            width: 15
+        series: [
+          {
+            type: "gauge",
+            startAngle: 180,
+            endAngle: 0,
+            splitNumber: 5,
+            radius: "80%",
+            center: ["50%", "70%"],
+            progress: {
+              show: true,
+              width: 15,
+            },
+            axisLine: {
+              lineStyle: {
+                width: 15,
+              },
+            },
+            axisTick: {
+              show: true,
+              distance: 3,
+              lineStyle: {
+                width: 1,
+                color: "#999",
+              },
+            },
+            splitLine: {
+              distance: 3,
+              length: 10,
+              lineStyle: {
+                width: 1,
+                color: "#999",
+              },
+            },
+            axisLabel: {
+              distance: 18,
+              color: "#999",
+              fontSize: 14,
+            },
+            anchor: {
+              show: true,
+              showAbove: true,
+              size: 18,
+              itemStyle: {
+                borderWidth: 10,
+              },
+            },
+            title: {
+              show: false,
+            },
+            detail: {
+              valueAnimation: true,
+              fontSize: 30,
+              offsetCenter: [0, "-120%"],
+              formatter: "{value}%",
+            },
+            data: [
+              {
+                value: this.value,
+              },
+            ],
           },
-          axisLine: {
-            lineStyle: {
-              width: 15
-            }
-          },
-          axisTick: {
-            show: true,
-            distance: 3,
-            lineStyle: {
-              width: 1,
-              color: '#999'
-            }
-          },
-          splitLine: {
-            distance: 3,
-            length: 10,
-            lineStyle: {
-              width: 1,
-              color: '#999'
-            }
-          },
-          axisLabel: {
-            distance: 18,
-            color: '#999',
-            fontSize: 14
-          },
-          anchor: {
-            show: true,
-            showAbove: true,
-            size: 18,
-            itemStyle: {
-              borderWidth: 10
-            }
-          },
-          title: {
-            show: false
-          },
-          detail: {
-            valueAnimation: true,
-            fontSize: 30,
-            offsetCenter: [0, '-120%'],
-            formatter: "{value}%"
-          },
-          data: [{
-            value: this.value
-          }]
-        }]
+        ],
       };
 
       return option;
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
-.gauge{
+.gauge {
   margin: auto;
 }
 </style>

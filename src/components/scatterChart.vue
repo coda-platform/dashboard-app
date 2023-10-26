@@ -1,10 +1,10 @@
 <template>
-  <v-chart :options="option"/>
+  <v-chart :options="option" />
 </template>
 
 <script>
-import ECharts from 'vue-echarts';
-import 'echarts/lib/chart/scatter';
+import ECharts from "vue-echarts";
+import "echarts/lib/chart/scatter";
 import "echarts";
 
 // var data = [
@@ -17,104 +17,103 @@ import "echarts";
 let that = this;
 export default {
   components: {
-    'v-chart': ECharts
+    "v-chart": ECharts,
   },
-  props:{
-    colors:{
-      type: Array
+  props: {
+    colors: {
+      type: Array,
     },
-    data:{
-      type: Array
-    }
+    data: {
+      type: Array,
+    },
   },
-  computed:{
-    option(){
+  computed: {
+    option() {
       var option = {
-        grid:{
+        grid: {
           containLabel: true,
-          left: 0
+          left: 0,
         },
         xAxis: {
           splitLine: {
-            show: false
-          }
+            show: false,
+          },
         },
         yAxis: {
-          type: 'category',
-          inverse: true
+          type: "category",
+          inverse: true,
         },
         title: {
           text: "Length of stay",
-          left: 'center',
-          bottom: '5'
+          left: "center",
+          bottom: "5",
         },
-        tooltip:{
+        tooltip: {
           formatter: (params) => {
             var site = params.value[1] === "Mean" ? "Mean" : params.value[1];
-            return site+': '+params.value[0]
-          }
+            return site + ": " + params.value[0];
+          },
         },
-        toolbox:{
-          show:true,
-          feature:{
-            saveAsImage:{
-              show:true,
-              title: "Save as image"
-            }
-          }
+        toolbox: {
+          show: true,
+          feature: {
+            saveAsImage: {
+              show: true,
+              title: "Save as image",
+            },
+          },
         },
-        series: []
+        series: [],
       };
-      this.data.forEach((siteData,i)=>{
-        var data = [], rangeData = [];
+      this.data.forEach((siteData, i) => {
+        var data = [],
+          rangeData = [];
         // data[0] = siteData[0][0]
         // data[1] = siteData[0][2] === "Mean" ? "Mean" : siteData[0][2];
-        data = siteData,
+        (data = siteData),
+          // rangeData[0] = siteData[0][1]
+          // rangeData[1] = siteData[0][2] === "Mean" ? "Mean" : siteData[0][1];
 
-        // rangeData[0] = siteData[0][1]
-        // rangeData[1] = siteData[0][2] === "Mean" ? "Mean" : siteData[0][1];
-
-        option.series.push({
-          name: siteData[1] === "Mean" ? "Mean" : siteData[1],
-          data: [data],
-          itemStyle:{color:siteData[1]==="Mean"?"black":this.colors[i]},
-          type: 'scatter',
-          symbolSize: 20
-        })//,
-            // rangeData = [
-            //   {
-            //     value:[rangeData[0][0], data[1]],
-            //     symbol: 'line',
-            //     symbolRotate: 90,
-            //     itemStyle: {
-            //       color: siteData[0][2]==="Mean"?"black":this.colors[i],
-            //     },
-            //     symbolSize: 10,
-            //   },
-            //   {
-            //     value:[rangeData[0][1], data[1]],
-            //     symbol: 'line',
-            //     symbolRotate: 90,
-            //     itemStyle: {
-            //       color: siteData[0][2]==="Mean"?"black":this.colors[i],
-            //     },
-            //     symbolSize: 10,
-            //   }
-            // ],
-            // option.series.push({
-            //   name: siteData[0][2] === "Mean" ? "Mean" : siteData[0][2],
-            //   data: rangeData,
-            //   lineStyle:{color:siteData[0][2]==="Mean"?"black":this.colors[i]},
-            //   type:'line',
-            //   symbolSize: 10
-            // })
-
+          option.series.push({
+            name: siteData[1] === "Mean" ? "Mean" : siteData[1],
+            data: [data],
+            itemStyle: {
+              color: siteData[1] === "Mean" ? "black" : this.colors[i],
+            },
+            type: "scatter",
+            symbolSize: 20,
+          }); //,
+        // rangeData = [
+        //   {
+        //     value:[rangeData[0][0], data[1]],
+        //     symbol: 'line',
+        //     symbolRotate: 90,
+        //     itemStyle: {
+        //       color: siteData[0][2]==="Mean"?"black":this.colors[i],
+        //     },
+        //     symbolSize: 10,
+        //   },
+        //   {
+        //     value:[rangeData[0][1], data[1]],
+        //     symbol: 'line',
+        //     symbolRotate: 90,
+        //     itemStyle: {
+        //       color: siteData[0][2]==="Mean"?"black":this.colors[i],
+        //     },
+        //     symbolSize: 10,
+        //   }
+        // ],
+        // option.series.push({
+        //   name: siteData[0][2] === "Mean" ? "Mean" : siteData[0][2],
+        //   data: rangeData,
+        //   lineStyle:{color:siteData[0][2]==="Mean"?"black":this.colors[i]},
+        //   type:'line',
+        //   symbolSize: 10
+        // })
       });
-      return option
-    }
-  }
-}
+      return option;
+    },
+  },
+};
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>
