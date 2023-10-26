@@ -87,7 +87,7 @@
           </v-card>
         </BRow>
       </BCol>
-      <BCol lg="4" md="4" offset="1" v-if="!inProgress" style="padding-top: 16px">
+      <BCol lg="4" md="4" offset="1" v-if="!trainingInProgress" style="padding-top: 16px">
         <BCard class="sitesCard">
           <BCardHeader class="cardHeader text-center">
             <div class="panelTitle">
@@ -278,6 +278,7 @@ export default {
       this.progressInterval = setInterval(() => {
         this.getProgress();
       }, 2000);
+
       const sitesUri = this.getSelectedSitesList()
       LearningApi.getTrain(this.trainBody, sitesUri)
         .then((res) => {
@@ -300,9 +301,21 @@ export default {
       const sitesUri = this.getSelectedSitesList()
       LearningApi.getProgress(this.progressBody, sitesUri).then((res) => {
         if (res.status == 200) {
+          if (this.evaluateCompleted) {
+            clearInterval(this.progressInterval);
+          }
           this.progressResult = res.data;
-          this.inProgress = true;
-          if (this.progressResult.length != 0) this.showGraphLoading = false;
+          if (this.progressResult[0] && 
+            this.progressResult[0].currentRound === 
+            this.progressResult[0].totalRounds) {
+            this.trainingInProgress = false;
+            this.getEvaluate()
+          } else {
+            this.trainingInProgress = true;
+          }
+          if (this.progressResult.length != 0) {
+            this.showGraphLoading = false;
+          }
           this.chartKey++
           console.log("Progress: ", this.progressResult)
         } else if (res.status == 500) {
@@ -313,16 +326,19 @@ export default {
     },
     getEvaluate() {
       const sitesUri = this.getSelectedSitesList()
-      
-      LearningApi.getEvaluate(this.evaluateBody, sitesUri).then((res) => {
-        if (res.status == 200) {
-          this.evaluateCompleted = true;
-          this.evaluateResult = res.data;
-        } else if (res.status == 500) {
-          this.isError = true;
-          this.errorMsg = res.message;
-        }
-      });
+      if (this.evaluationInProgress || this.evaluateCompleted) {
+        return
+      } else {
+        this.evaluationInProgress = true
+      }
+      try {
+        LearningApi.getEvaluate(this.evaluateBody, sitesUri);
+      } catch (err) {
+        this.isError = true;
+        this.errorMsg = err.message;
+        this.evaluateCompleted = true;
+        this.evaluationInProgress = false;
+      }
     },
     
     // Check if a site is selected
@@ -363,7 +379,8 @@ export default {
       showTrainInput: false,
       showCountResult: false,
       isTrainButtonDisabled: false,
-      inProgress: false,
+      trainingInProgress: false,
+      evaluationInProgress: false,
       isPreparing: false,
       isTraining: false,
       evaluateCompleted: false,
