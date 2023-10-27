@@ -64,7 +64,7 @@ export default {
           type: "line",
           name: site,
           showSymbol: true,
-          data: this.dataset[site].reverse(),
+          data: this.dataset[site]
         };
         series.push(serie);
       });
