@@ -139,6 +139,112 @@
 </template>
 
 <script>
+
+const prepareBody = `{
+  "selectors": [
+    {
+      "limit": 100,
+      "resource": "Patient",
+      "label": "patient",
+      "filters": [
+        {
+          "path": "age",
+          "operator": "is greater than",
+          "value": "18",
+          "type": "integer"
+        }
+      ],
+      "fields": [
+        {
+          "path": "gender",
+          "label": "gender",
+          "type": "string"
+        },
+        {
+          "path": "age",
+          "label": "age",
+          "type": "integer"
+        },
+        {
+          "path": "isDeceased",
+          "label": "isDeceased",
+          "type": "boolean"
+        }
+      ],
+      "joins": {
+        "resource": "ImagingStudy",
+        "label": "obs1",
+        "filters": [
+          {
+            "path": "series.modality.code",
+            "operator": "is",
+            "value": "CR",
+            "type": "string"
+          },
+          {
+            "path": "series.bodySite.code",
+            "operator": "is",
+            "value": "67734004",
+            "type": "string"
+          }
+        ],
+        "fields": [
+          {
+            "path": "series.uid",
+            "label": "seriesID",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ],
+  "options": {
+    "model": {
+      "class_name": "Sequential",
+      "config": {
+        "name": "sequential_1",
+        "layers": [
+          "etc..."
+        ]
+      }
+    },
+    "inputs": [
+      "gender",
+      "age",
+      "seriesID"
+    ],
+    "outputs": [
+      "isDeceased"
+    ],
+    "optimizer": {
+      "name": "adam",
+      "parameters": {
+        "learning_rate": 0.00004,
+        "validation_split": 0.33,
+        "evaluation_split": 0.2,
+        "epochs": 1,
+        "batch_size": 16,
+        "shuffle": 200
+      }
+    },
+    "compiler": {
+      "parameters": {
+        "loss": "binaryCrossentropy",
+        "metrics": [
+          "accuracy"
+        ]
+      }
+    },
+    "transforms": {
+      "resizeImage": {
+        "width": 128,
+        "height": 128,
+        "depth": 1
+      }
+    }
+  }
+}`
+
 import LearningApi from "@/api/LearningApi";
 import SiteApi from "@/api/SiteApi";
 import LearningLineChart from "../components/LearningLineChart.vue";
@@ -263,91 +369,7 @@ export default {
       evaluateResult: [],
       countResult: [],
       jobID: "",
-      prepareBody: `{
-        "selectors": [
-          {
-            "resource": "Patient",
-            "label": "PA",
-            "limit": 1000,
-            "filters": [
-            ],
-            "fields": [
-              {
-                "path":"gender",
-                "label": "gender",
-                "type": "string"
-              },
-              {
-                "path":"age",
-                "label":"age",
-                "type": "integer"
-              },
-              {
-                "path":"isDeceased",
-                "label":"isDeceased",
-                "type": "boolean"
-              }
-            ]
-          },
-          {
-            "resource": "Observation",
-            "label": "OB",
-            "filters": [
-              {
-                "path": "code.coding.code",
-                "operator": "is",
-                "value": "20570-8",
-                "type": "string"
-              }
-            ],
-            "fields": [
-              {
-                "path":"value.Quantity.value",
-                "label": "hematocrit",
-                "type": "integer"
-              }
-            ]
-          }
-        ],
-        "options": {
-          "model": {
-            "class_name": "Sequential",
-            "config": {
-              "name": "sequential_1",
-              "layers": [
-                  "etc..."
-              ]
-            }
-          },
-          "inputs": [
-            "gender",
-            "age",
-            "hematocrit"
-          ],
-          "outputs": [
-            "isDeceased"
-          ],
-          "optimizer": {
-            "name": "adam",
-            "parameters": {
-              "learning_rate": 0.00025,
-              "validation_split": 0.33,
-              "evaluation_split": 0.2,
-              "epochs": 1,
-              "batch_size": 20,
-              "shuffle": 1000
-            }
-          },
-          "compiler": {
-            "parameters": {
-              "loss": "binaryCrossentropy",
-              "metrics": [
-                "accuracy"
-              ]
-            }
-          }
-        }
-      }`,
+      prepareBody: prepareBody
     };
   },
   computed: {
