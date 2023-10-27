@@ -42,44 +42,18 @@ export default {
     onResize() {
       this.$refs.MultiLineChart.resize();
     },
-
-    getSites: function () {
-      this.dataValues.forEach((el) => {
-          if (!this.sites.includes(el.siteCode)) {
-            this.sites.push(el.siteCode);
-          }
-      });
-    },
     datasetTransform: function () {
-      let metric = this.dataToPlot.value;
-
-      // if(this.sites.length == 0) {
-      //   this.getSites();
-      // };
-
       this.sites.forEach((site) => {
         this.dataset[site] = [] //make an array in dateset for each site
       })
       this.dataValues.forEach((data) => { //push each line of data into right site
-        this.dataset[data.siteCode].push(data[metric])
+        this.dataset[data.siteCode].push(data.value)
       })
-      for (var site in this.dataset) {
-        if (site)
-          this.dataset[site].sort((a, b) => (a - b)); //sort numbers
-      }
       this.xAxis = this.range(1, this.dataset[this.sites[0]].length, 1);
       return this.dataset;
     },
     datasetSeries: function () {
       let series = [];
-      if (this.sites.length == 0) {
-        this.dataValues.forEach((el) => {
-          if (!this.sites.includes(el.siteCode)) {
-            this.sites.push(el.siteCode);
-            this.series[el.siteCode] = [];
-          }
-        });
-      }
       this.sites.forEach((site) => {
         const serie = {
           type: "line",
@@ -105,7 +79,6 @@ export default {
   },
   computed: {
     option() {
-      this.getSites()
       this.datasetTransform()
       this.datasetSeries()
       return {
