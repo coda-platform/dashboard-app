@@ -152,10 +152,17 @@ import SiteApi from "@/api/SiteApi";
 const defaultPrepareBody = `{
   "selectors": [
     {
+      "limit": 100,
       "resource": "Patient",
-      "label": "PA",
-      "limit": 1000,
-      "filters": [],
+      "label": "patient",
+      "filters": [
+        {
+          "path": "age",
+          "operator": "is greater than",
+          "value": "18",
+          "type": "integer"
+        }
+      ],
       "fields": [
         {
           "path": "gender",
@@ -172,26 +179,32 @@ const defaultPrepareBody = `{
           "label": "isDeceased",
           "type": "boolean"
         }
-      ]
-    },
-    {
-      "resource": "Observation",
-      "label": "OB",
-      "filters": [
-        {
-          "path": "code.coding.code",
-          "operator": "is",
-          "value": "20570-8",
-          "type": "string"
-        }
       ],
-      "fields": [
-        {
-          "path": "value.Quantity.value",
-          "label": "hematocrit",
-          "type": "integer"
-        }
-      ]
+      "joins": {
+        "resource": "ImagingStudy",
+        "label": "obs1",
+        "filters": [
+          {
+            "path": "series.modality.code",
+            "operator": "is",
+            "value": "CR",
+            "type": "string"
+          },
+          {
+            "path": "series.bodySite.code",
+            "operator": "is",
+            "value": "67734004",
+            "type": "string"
+          }
+        ],
+        "fields": [
+          {
+            "path": "series.uid",
+            "label": "seriesID",
+            "type": "string"
+          }
+        ]
+      }
     }
   ],
   "options": {
@@ -207,7 +220,7 @@ const defaultPrepareBody = `{
     "inputs": [
       "gender",
       "age",
-      "hematocrit"
+      "seriesID"
     ],
     "outputs": [
       "isDeceased"
@@ -215,12 +228,12 @@ const defaultPrepareBody = `{
     "optimizer": {
       "name": "adam",
       "parameters": {
-        "learning_rate": 0.00025,
+        "learning_rate": 0.00004,
         "validation_split": 0.33,
         "evaluation_split": 0.2,
         "epochs": 1,
-        "batch_size": 2,
-        "shuffle": 1000
+        "batch_size": 16,
+        "shuffle": 200
       }
     },
     "compiler": {
@@ -229,6 +242,13 @@ const defaultPrepareBody = `{
         "metrics": [
           "accuracy"
         ]
+      }
+    },
+    "transforms": {
+      "resizeImage": {
+        "width": 128,
+        "height": 128,
+        "depth": 1
       }
     }
   }
