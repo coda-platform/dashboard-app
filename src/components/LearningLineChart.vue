@@ -46,7 +46,7 @@ export default {
       this.dataValues.forEach((data) => {
         if (!this.dataset[data.siteCode]) this.dataset[data.siteCode] = []
         if (!this.sites.includes(data.siteCode)) this.sites.push(data.siteCode)
-        if (data.currentRound > this.dataset[data.siteCode].length) {
+        if (data.currentRound === this.dataset[data.siteCode].length + 1) {
           this.dataset[data.siteCode].push(data.value)
         }
       })
