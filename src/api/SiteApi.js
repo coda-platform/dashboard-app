@@ -1,12 +1,11 @@
-import AxiosInstance from './AxiosInstance';
-import TokenBearerHeaderFactory from './TokenBearerHeaderFactory';
+import AxiosInstance from "./AxiosInstance";
+import TokenBearerHeaderFactory from "./TokenBearerHeaderFactory";
 
 function get() {
-    const headers = TokenBearerHeaderFactory.get();
-    return AxiosInstance.get('/sites', {headers: headers});
+  const headers = TokenBearerHeaderFactory.get();
+  return AxiosInstance.get("/sites", { headers: headers });
 }
-
 
 export default {
-    get
-}
+  get,
+};

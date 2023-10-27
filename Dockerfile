@@ -1,4 +1,4 @@
-FROM node:16-alpine3.13 as base-node-modules
+FROM node:18-alpine as base-node-modules
 
 WORKDIR /usr/src/build
 
@@ -6,6 +6,10 @@ RUN apk update \
     && apk add openssl
 
 COPY ./ ./
+
+# Make build footprint version for easier debugging.
+RUN rm ./version.txt
+RUN openssl rand -hex 12 > version.txt
 
 RUN apk --no-cache add git
 RUN git submodule update --init --recursive
@@ -21,29 +25,14 @@ ENV CODA_DASHBOARD_APP_AUTH_CLIENT_ID=${CODA_DASHBOARD_APP_AUTH_CLIENT_ID}
 ENV CODA_AUTH_SERVICE_URL=${CODA_AUTH_SERVICE_URL}
 
 RUN touch .env
-RUN echo "CODA_DASHBOARD_API_URL=${CODA_DASHBOARD_API_URL}\n" > .env
-RUN echo "CODA_DASHBOARD_APP_AUTH_REALM=${CODA_DASHBOARD_APP_AUTH_REALM}\n" > .env
-RUN echo "CODA_DASHBOARD_APP_AUTH_CLIENT_ID=${CODA_DASHBOARD_APP_AUTH_CLIENT_ID}\n" > .env
-RUN echo "CODA_AUTH_SERVICE_URL=${CODA_AUTH_SERVICE_URL}" >> .env
+RUN echo "VITE_CODA_DASHBOARD_API_URL=${CODA_DASHBOARD_API_URL}" >> .env
+RUN echo "VITE_CODA_DASHBOARD_APP_AUTH_REALM=${CODA_DASHBOARD_APP_AUTH_REALM}" >> .env
+RUN echo "VITE_CODA_DASHBOARD_APP_AUTH_CLIENT_ID=${CODA_DASHBOARD_APP_AUTH_CLIENT_ID}" >> .env
+RUN echo "VITE_CODA_AUTH_SERVICE_URL=${CODA_AUTH_SERVICE_URL}" >> .env
 RUN cat .env
 
-RUN yarn cache clean
-RUN yarn install
-RUN rm -f .npmrc
-RUN yarn build
-
-FROM node:16-alpine3.13
-RUN npm install -g http-server
-
-RUN apk update \
-    && apk add openssl
-
-WORKDIR /usr/src/app
-COPY --from=base-node-modules /usr/src/build ./
-
-# Make build footprint version for easier debugging.
-RUN rm ./version.txt
-RUN openssl rand -hex 12 > version.txt
+RUN npm install
+RUN npm run build
 
 EXPOSE 8080
-CMD [ "http-server", "--port", "8080",  "dist" ]
+CMD [ "npm", "run", "serve" ]

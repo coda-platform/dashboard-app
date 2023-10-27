@@ -1,12 +1,12 @@
 <template>
-  <v-card>
-    <v-footer absolute class="font-weight-medium" >
-      <v-col class="text-center" cols="11">
-        <strong>CODA</strong>, {{ new Date().getFullYear() }}
-      </v-col>
-      <v-col class="text-right" cols="1">
-        <router-link to="/homemetrics" class="nav-link">{{ $t('homeMetricsTxt') }}</router-link>
-      </v-col>
-    </v-footer>
-  </v-card>
+  <v-layout>
+    <v-card width="100%" height="50px" style="position: fixed; bottom: 0; z-index: 999;">
+      <v-footer absolute class="font-weight-medium">
+        <span style="position: absolute; right: 100px; top: 10px;">
+          <strong>© CODA Collaborative</strong>, 
+          2020-{{ new Date().getFullYear() }}
+        </span>
+      </v-footer>
+    </v-card>
+  </v-layout>
 </template>
