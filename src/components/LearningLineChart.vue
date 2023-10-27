@@ -28,53 +28,14 @@ export default {
   components: { VChart },
   props: {
     dataValues: Array,
-    dataToPlot: Object,
-  },
-  data() {
-    return {
-      series: [],
-      dataset: {},
-      xAxis: [],
-      sites: []
-    };
   },
   methods: {
     onResize() {
       this.$refs.MultiLineChart.resize();
     },
-    datasetTransform: function () {
-      this.dataValues.forEach((data) => {
-        if (!this.dataset[data.siteCode]) this.dataset[data.siteCode] = []
-        if (!this.sites.includes(data.siteCode)) this.sites.push(data.siteCode)
-        if (data.currentRound === this.dataset[data.siteCode].length + 1) {
-          this.dataset[data.siteCode].push(data.value)
-        }
-      })
-      if (this.dataValues.length > 0) {
-        this.xAxis = this.range(1, this.dataset[Object.keys(this.dataset)[0]].length, 1);
-      } else {
-        this.xAxis = []
-      }
-      return this.dataset;
+    range: function (start, stop, step) { 
+      return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
     },
-    datasetSeries: function () {
-      let series = [];
-      this.sites.forEach((site) => {
-        const serie = {
-          type: "line",
-          name: site,
-          showSymbol: true,
-          data: this.dataset[site]
-        };
-        series.push(serie);
-      });
-      this.series = series
-      return series;
-    },
-
-  range: function (start, stop, step) { 
-    return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
-  },
   },
   mounted() {
     window.addEventListener("resize", this.onResize);
@@ -84,10 +45,23 @@ export default {
   },
   computed: {
     option() {
-      this.datasetTransform()
-      this.datasetSeries()
+      
+      const series = this.dataValues.reduce((val, acc) => {
+          if (!acc[val.siteCode]) acc[val.siteCode] = {
+            type: "line",
+            name: val.siteCode,
+            showSymbol: true,
+            data: []
+          }
+          acc[val.siteCode].data.push(val.value)
+          return acc
+        }, {})
+
+      const len = Object.keys(series).length > 0 ? 
+        Object.values(series)[0].data.length : 0
+
       return {
-        series: this.series,
+        series: series,
         legend: { data: this.sites },
         tooltip: { trigger: "axis" },
         grid: { bottom: "3%", containLabel: true },
@@ -95,7 +69,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.xAxis
+          data: this.range(1,len,1)
         },
         yAxis: {
           type: "value",

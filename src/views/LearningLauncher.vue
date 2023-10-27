@@ -124,9 +124,7 @@
               <BCardBody class="metricsCardBody">
                 <LearningLineChart
                   :key="metric.name + '-' + chartKey.toString()"
-                  :dataToPlot="metric"
                   :dataValues="progressResult.map((item) => ({ value: item[metric.value], round: item.currentRound, siteCode: item.siteCode }))"
-                  :sites="selectedSites"
                 ></LearningLineChart>
               </BCardBody>
             </BCard>
