@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     onResize() {
-      this.$refs.MultiLineChart.resize();
+      this.$refs.LearningLineChart.resize();
     },
     range: function (start, stop, step) { 
       return Array.from({ length: (stop - start) / step + 1 }, (_, i) => start + i * step)
@@ -46,12 +46,12 @@ export default {
   computed: {
     option() {
       
-      const sites = this.dataValues.reduce((val, acc) => {
+      const sites = this.dataValues.reduce((acc, val) => {
         if (!acc.includes(val.siteCode)) acc.push(val.siteCode)
         return acc
       }, [])
 
-      const series = this.dataValues.reduce((val, acc) => {
+      const series = this.dataValues.reduce((acc, val) => {
           if (!acc[val.siteCode]) acc[val.siteCode] = {
             type: "line",
             name: val.siteCode,
@@ -84,5 +84,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
