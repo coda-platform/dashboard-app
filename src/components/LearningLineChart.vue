@@ -46,7 +46,9 @@ export default {
       this.dataValues.forEach((data) => {
         if (!this.dataset[data.siteCode]) this.dataset[data.siteCode] = []
         if (!this.sites.includes(data.siteCode)) this.sites.push(data.siteCode)
-        this.dataset[data.siteCode].push(data.value)
+        if (data.currentRound > this.dataset[data.siteCode].length) {
+          this.dataset[data.siteCode].push(data.value)
+        }
       })
       if (this.dataValues.length > 0) {
         this.xAxis = this.range(1, this.dataset[Object.keys(this.dataset)[0]].length, 1);
