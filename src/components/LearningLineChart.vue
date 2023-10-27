@@ -29,13 +29,13 @@ export default {
   props: {
     dataValues: Array,
     dataToPlot: Object,
-    sites: Array
   },
   data() {
     return {
       series: [],
       dataset: {},
       xAxis: [],
+      sites: []
     };
   },
   methods: {
@@ -45,6 +45,7 @@ export default {
     datasetTransform: function () {
       this.dataValues.forEach((data) => {
         if (!this.dataset[data.siteCode]) this.dataset[data.siteCode] = []
+        if (!this.sites.includes(data.siteCode)) this.sites.push(data.siteCode)
         this.dataset[data.siteCode].push(data.value)
       })
       this.xAxis = this.range(1, this.dataset[this.sites[0]].length, 1);
@@ -57,7 +58,7 @@ export default {
           type: "line",
           name: site,
           showSymbol: true,
-          data: this.dataset[site],
+          data: this.dataset[site].reverse(),
         };
         series.push(serie);
       });
