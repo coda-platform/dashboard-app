@@ -46,6 +46,11 @@ export default {
   computed: {
     option() {
       
+      const sites = this.dataValues.reduce((val, acc) => {
+        if (!acc.includes(val.siteCode)) acc.push(val.siteCode)
+        return acc
+      }, [])
+
       const series = this.dataValues.reduce((val, acc) => {
           if (!acc[val.siteCode]) acc[val.siteCode] = {
             type: "line",
@@ -62,7 +67,7 @@ export default {
 
       return {
         series: series,
-        legend: { data: this.sites },
+        legend: { data: sites },
         tooltip: { trigger: "axis" },
         grid: { bottom: "3%", containLabel: true },
         toolbox: { feature: { saveAsImage: {} } },
