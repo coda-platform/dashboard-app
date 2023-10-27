@@ -43,10 +43,8 @@ export default {
       this.$refs.MultiLineChart.resize();
     },
     datasetTransform: function () {
-      this.sites.forEach((site) => {
-        this.dataset[site] = [] //make an array in dateset for each site
-      })
-      this.dataValues.forEach((data) => { //push each line of data into right site
+      this.dataValues.forEach((data) => {
+        if (!this.dataset[data.siteCode]) this.dataset[data.siteCode] = []
         this.dataset[data.siteCode].push(data.value)
       })
       this.xAxis = this.range(1, this.dataset[this.sites[0]].length, 1);
