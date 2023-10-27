@@ -62,8 +62,11 @@ export default {
           return acc
         }, {})
 
-      const series = sites.map((site) => seriesBySite[site])
-      
+      const series = sites.map((site) => ({
+        ...seriesBySite[site],
+        data: seriesBySite[site].data.reverse()
+      }))
+
       const len = Object.keys(series).length > 0 ? 
         Object.values(series)[0].data.length : 0
 
