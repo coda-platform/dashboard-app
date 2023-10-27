@@ -51,7 +51,7 @@ export default {
         return acc
       }, [])
 
-      const series = this.dataValues.reduce((acc, val) => {
+      const seriesBySite = this.dataValues.reduce((acc, val) => {
           if (!acc[val.siteCode]) acc[val.siteCode] = {
             type: "line",
             name: val.siteCode,
@@ -62,6 +62,8 @@ export default {
           return acc
         }, {})
 
+      const series = sites.map((site) => seriesBySite[site])
+      
       const len = Object.keys(series).length > 0 ? 
         Object.values(series)[0].data.length : 0
 
@@ -74,7 +76,7 @@ export default {
         xAxis: {
           type: "category",
           boundaryGap: false,
-          data: this.range(1,len,1)
+          data: len > 0 ? this.range(1,len,1) : []
         },
         yAxis: {
           type: "value",
