@@ -48,7 +48,11 @@ export default {
         if (!this.sites.includes(data.siteCode)) this.sites.push(data.siteCode)
         this.dataset[data.siteCode].push(data.value)
       })
-      this.xAxis = this.range(1, this.dataset[this.sites[0]].length, 1);
+      if (this.dataValues.length > 0) {
+        this.xAxis = this.range(1, this.dataset[Object.keys(this.dataset)[0]].length, 1);
+      } else {
+        this.xAxis = []
+      }
       return this.dataset;
     },
     datasetSeries: function () {
