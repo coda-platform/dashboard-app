@@ -1,3 +1,4 @@
+rm -r -f ./dist
 
 docker build \
     --build-arg BUILD_ENV=dev \

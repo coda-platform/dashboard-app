@@ -74,7 +74,7 @@ objects:
                 - name: CODA_DASHBOARD_APP_PORT
                   value: "${CODA_DASHBOARD_APP_PORT}"
               name: ${CODA_HUB_DASHBOARD}
-              image: coda19/coda-hub-dashboard:latest
+              image: coda19/coda-hub-dashboard:dev
               ports:
                 - name: ${CODA_HUB_DASHBOARD}
                   containerPort: 8080

@@ -8,6 +8,13 @@ deploy.tar
 # local env files
 .env.local
 .env.*.local
+local.env
+
+# prod env files
+*.env
+
+# openshift deploys
+openshift-commands.txt
 
 # Log files
 npm-debug.log*
